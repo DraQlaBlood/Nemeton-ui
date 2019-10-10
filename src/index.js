@@ -5,9 +5,15 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 
+import { Provider } from "mobx-react";
+
+import stores from "./components/stores";
+
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <Provider requests={stores.requests}>
+      <App />
+    </Provider>
   </BrowserRouter>,
   document.getElementById("root")
 );

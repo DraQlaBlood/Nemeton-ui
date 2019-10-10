@@ -2,15 +2,19 @@ import React from "react";
 import Switch from "react-switch";
 import { Button, Form, FormControl } from "react-bootstrap";
 
+import { inject, observer } from "mobx-react";
+
 import ReqCard from "./requestLayout/reqCard";
 import data from "../utils/data";
 
+@inject("requests")
+@observer
 class Landing extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: false,
-      requests: data
+      checked: false
+      //requests: data
     };
   }
 
@@ -19,11 +23,12 @@ class Landing extends React.Component {
   };
 
   render() {
-    const { checked, requests } = this.state;
+    const { checked } = this.state;
+    //const { requests } = this.props;
 
-    const requestsList = requests.map(req => (
-      <ReqCard key={req.id} data={req} />
-    ));
+    const requestsList = this.props.requests.all
+      .slice()
+      .map(req => <ReqCard key={req.id} data={req} />);
 
     return (
       <div className="px-4 flex-grow-1">
