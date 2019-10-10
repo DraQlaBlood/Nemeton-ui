@@ -1,22 +1,43 @@
-.App {
-  text-align: center;
+body{
+  font-family: 'Open Sans', sans-serif;
+  background:#f8f9f9;
+  width:100vw;
+  height:100vh;
+}
+/* Navigation */
+.nav-link , .liens{
+  color: #000 !important;
 }
 
-.App-logo {
-  height: 40vmin;
+.nav-link:hover , .liens:hover{
+  color: #fd7e14 !important;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* End Navigation */
+/* Index */
+.btn-filter{
+  display: block;
+  color:#000;
+  background: transparent;
+  border: none;
 }
-
-.App-link {
-  color: #09d3ac;
+.btn-filter:hover{
+  display: block;
+  color:#000;
+  background: #fd7e14;
+  border: none;
 }
+.card-index{
+  color : #000;
+}
+.card-index:hover{
+  color : #000;
+  background-color: #f8f9f9 !important;
+  text-decoration: none;
+}
+.desc{
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* End Index */
