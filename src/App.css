@@ -1,9 +1,32 @@
-body{
-  font-family: 'Open Sans', sans-serif;
+body , html{
+  font-family: 'Raleway', sans-serif;
   background:#f8f9f9;
-  width:100vw;
   height:100vh;
+  overflow-x: hidden;
 }
+.App {
+  height: 100vh;
+}
+
+.btn-global-orange{
+  background: #fd7e14;
+  border: none;
+}
+.btn-global-orange:hover{
+  background: #000;
+  border: none;
+  color: #fff;
+}
+.form-control:focus{
+  border-color:#fd7e14;
+  box-shadow: none; -webkit-box-shadow: none;
+}
+.footer {
+  width: 100%;
+  left: 0;
+  bottom: 0;
+}
+
 /* Navigation */
 .nav-link , .liens{
   color: #000 !important;
@@ -12,8 +35,19 @@ body{
 .nav-link:hover , .liens:hover{
   color: #fd7e14 !important;
 }
+
+.profileEnTete{
+  background: #fd7e14;
+  height:45px;
+}
 /* End Navigation */
 /* Index */
+
+.roundedhomeimg{
+  width: 400px;
+  height: 400px;
+
+}
 .btn-filter{
   display: block;
   color:#000;
@@ -41,3 +75,34 @@ body{
   overflow: hidden;
 }
 /* End Index */
+/* Signin page */
+.signin{
+  overflow: hidden;
+}
+/* End Signin page */
+
+/* message components**/
+.messages{
+ height: 250px;
+  overflow-y: scroll;
+}
+.conversations:hover{
+  background: #f5f5f5;
+  border-bottom: 1px solid black;
+}
+.convoList{
+  height: 300px;
+  overflow-y: scroll;
+}
+/* message components**/
+
+
+/* Media queries */
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .roundedhomeimg{
+    width: 200px;
+    height: 200px;
+  
+  }
+}

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const ReqCard = ({ data }) => {
   return (
-    <Link className="card-index" to={"/request/" + data.id}>
+    <Link className="card-index" to={"/show-req-details/" + data.id}>
       <Card className="mb-2">
         <Card.Body>
           <Card.Title>{data.title}</Card.Title>
