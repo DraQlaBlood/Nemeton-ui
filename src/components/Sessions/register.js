@@ -1,93 +1,41 @@
 import React from "react";
+import { inject, observer } from "mobx-react";
 
 import { Form, Button, Row, Col } from "react-bootstrap";
+import Spinner from "../../lib/components/spinner/load";
 
-const emailRegex = RegExp(
-  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-);
-const formValid = ({ formErrors, user }) => {
-  let valid = true;
-  Object.values(formErrors).forEach(val => {
-    val.length > 0 && (valid = false);
-  });
-
-  Object.values(user).forEach(val => {
-    val === null && (valid = false);
-  });
-  return valid;
-};
-
+@inject("user")
+@observer
 class Signup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      confirmpassword: "",
-      user: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: ""
-      },
-      formErrors: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        confirmpassword: ""
-      }
-    };
+  componentDidMount() {
+    this.props.user.signInWithoutResources();
   }
 
-  handleChange = e => {
-    //e.preventDefault();
-    let formErrors = this.state.formErrors;
-    let user = this.state.user;
-    const { name, value } = e.target;
-    switch (name) {
-      case "firstName":
-        user.firstName = value;
-        formErrors.firstName =
-          value.length < 3 ? "minimum 3 characters required" : "";
-        break;
-      case "lastName":
-        user.lastName = value;
-        formErrors.lastName =
-          value.length < 3 ? "minimum 3 characters required" : "";
-        break;
-      case "email":
-        user.email = value;
-        formErrors.email = emailRegex.test(value)
-          ? ""
-          : "invalid email address";
-        this.setState({ email: value });
-        break;
-      case "password":
-        user.password = value;
-        formErrors.password =
-          value.length < 7 ? "minimum 7 characters required" : "";
-        break;
-      case "confirmpassword":
-        this.setState({ confirmpassword: value });
-        formErrors.confirmpassword =
-          value !== user.password ? "password not identical" : "";
-        break;
-
-      default:
-        break;
-    }
-    this.setState({ formErrors, user });
-  };
-  handleSubmit = e => {
+  submitForm = e => {
     e.preventDefault();
-    if (formValid(this.state)) {
-      console.log("submission success");
-    } else {
-      console.log("submission error");
-    }
+    const { user } = this.props;
+    user.create(
+      this.firstName.value,
+      this.lastName.value,
+      this.email.value,
+      this.password.value,
+      this.confirm_password.value
+    );
   };
 
   render() {
-    const { formErrors } = this.state;
+    const { isLoading } = this.props.user;
+    if (isLoading) {
+      return (
+        <div className="flex-grow-1">
+          <div className="d-flex flex-column ">
+            <div className="align-self-center">
+              <Spinner />
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="flex-grow-1 signin">
         <hr />
@@ -104,29 +52,21 @@ class Signup extends React.Component {
                   <Form.Label>Firstname</Form.Label>
                   <Form.Control
                     type="text"
-                    name="firstName"
-                    onChange={this.handleChange}
+                    ref={node => {
+                      this.firstName = node;
+                    }}
                     placeholder="Firstname"
                   />
-                  {formErrors.firstName.length > 0 && (
-                    <small className="errorMessage">
-                      {formErrors.firstName}
-                    </small>
-                  )}
                 </Form.Group>
                 <Form.Group className="col-sm-12 col-md-6">
                   <Form.Label>Lastname</Form.Label>
                   <Form.Control
                     type="text"
-                    name="lastName"
-                    onChange={this.handleChange}
+                    ref={node => {
+                      this.lastName = node;
+                    }}
                     placeholder="Lastname"
                   />
-                  {formErrors.lastName.length > 0 && (
-                    <small className="errorMessage">
-                      {formErrors.lastName}
-                    </small>
-                  )}
                 </Form.Group>
               </Form.Row>
 
@@ -135,8 +75,9 @@ class Signup extends React.Component {
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     type="password"
-                    name="password"
-                    onChange={this.handleChange}
+                    ref={node => {
+                      this.password = node;
+                    }}
                     placeholder="Password"
                   />
                 </Form.Group>
@@ -144,8 +85,9 @@ class Signup extends React.Component {
                   <Form.Label>Confirm Password</Form.Label>
                   <Form.Control
                     type="password"
-                    name="confirmPassword"
-                    onChange={this.handleChange}
+                    ref={node => {
+                      this.confirm_password = node;
+                    }}
                     placeholder="Confirm your password"
                   />
                 </Form.Group>
@@ -154,16 +96,14 @@ class Signup extends React.Component {
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
                   type="email"
-                  name="email"
-                  onChange={this.handleChange}
+                  ref={node => {
+                    this.email = node;
+                  }}
                   placeholder="Email address"
                 />
-                {formErrors.email.length > 0 && (
-                  <small className="errorMessage">{formErrors.email}</small>
-                )}
               </Form.Group>
               <Button
-                onClick={this.handleSubmit}
+                onClick={this.submitForm}
                 className="btn-global-orange col-12"
                 type="submit"
               >

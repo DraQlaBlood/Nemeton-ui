@@ -13,9 +13,9 @@ body , html{
   border: none;
 }
 .btn-global-orange:hover{
-  background: #000;
+  background: #dbdbdb;
   border: none;
-  color: #fff;
+  color:  #421e01;
 }
 .form-control:focus{
   border-color:#fd7e14;

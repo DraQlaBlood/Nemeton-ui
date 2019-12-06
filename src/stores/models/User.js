@@ -4,6 +4,7 @@ import history from "../../history";
 
 class User {
   sessions = "/sessions";
+  users = "/users";
   @observable isLoading = false;
   @observable signedIn = false;
   @observable email = null;
@@ -72,6 +73,28 @@ class User {
       //history.push("/welcome");
     } else {
       this.signOut();
+    }
+  }
+
+  async create(firstName, lastName, email, password, password_confirmation) {
+    this.setIsLoading(true);
+    const response = await Api.post(this.users, {
+      user: {
+        firstName,
+        lastName,
+        email,
+        password,
+        password_confirmation
+      }
+    });
+
+    const status = await response.status;
+
+    if (status === 200) {
+      this.setIsLoading(false);
+      history.push("/users/new-user-session");
+    } else {
+      console.log("error");
     }
   }
 

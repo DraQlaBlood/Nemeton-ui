@@ -54,10 +54,10 @@ class Landing extends React.Component {
           <div className="row">
             <div className="col-sm-6 col-md-4 p-2 ">
               <div className="row">
-                <div classname="col-2">
-                  <i class="fas fa-globe-africa fa-2x"></i>
+                <div className="col-2">
+                  <i className="fas fa-globe-africa fa-2x"></i>
                 </div>
-                <div classname="col-10">
+                <div className="col-10">
                   Le Lorem Ipsum est simplement du faux texte employé dans la
                   composition et la mise en page avant impression. Le Lorem
                   Ipsum est le faux texte standard de l'imprimerie depuis les

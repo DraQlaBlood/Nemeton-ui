@@ -17,7 +17,7 @@ class Messaging extends React.Component {
         <div className="col-md-3 ">
           <Inbox />
         </div>
-        <div className="col-md-9 ">
+        <div className="col-md-7 ">
           <Discussion />
         </div>
       </div>
