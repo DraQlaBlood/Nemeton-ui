@@ -8,8 +8,13 @@ class Discover extends React.Component {
         <Accordion defaultActiveKey="0">
           <div>
             <div className="bg-light">
-              <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                Recent
+              <Accordion.Toggle
+                as={Button}
+                variant="link"
+                className="liens nav-link"
+                eventKey="0"
+              >
+                Recent history
               </Accordion.Toggle>
             </div>
             <Accordion.Collapse eventKey="0" className="p-2">
@@ -18,8 +23,13 @@ class Discover extends React.Component {
           </div>
           <div>
             <div className="bg-light">
-              <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                Groups
+              <Accordion.Toggle
+                as={Button}
+                variant="link"
+                className="liens nav-link"
+                eventKey="1"
+              >
+                Groups history
               </Accordion.Toggle>
             </div>
             <Accordion.Collapse eventKey="1" className="p-2">

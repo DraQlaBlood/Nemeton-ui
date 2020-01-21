@@ -14,12 +14,13 @@ class AddRequest extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.requests.add({
-      title: this.refs.title.value,
-      location: this.refs.location.value,
-      description: this.refs.description.value,
-      category_id: this.refs.category_id.value
-    });
+
+    let title = this.refs.title.value;
+    let location = this.refs.location.value;
+    let description = this.refs.description.value;
+    let category_id = this.refs.category_id.value;
+
+    this.props.requests.add(title, location, description, category_id);
   };
 
   render() {
@@ -31,12 +32,8 @@ class AddRequest extends React.Component {
       </option>
     ));
     return (
-      <div className="px-4 flex-grow-1">
-        <hr />
+      <div className="container flex-grow-1">
         <div className="p-3 bg-white">
-          <div className="d-flex justify-content-center text-uppercase">
-            <strong>New Request</strong>
-          </div>
           <hr />
           <Row className="px-4">
             <Col xs={12} md={12}>

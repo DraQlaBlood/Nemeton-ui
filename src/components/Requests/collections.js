@@ -4,17 +4,21 @@ import React from "react";
 
 import { inject, observer } from "mobx-react";
 
-//import ReqCard from "./requestLayout/reqCard";
+import ReqCard from "./reqCard";
 
-@inject("requests")
+@inject("requests", "user")
 @observer
-class RequestCollections extends React.Component {
+class ReqCol extends React.Component {
   componentDidMount() {
     this.props.requests.fetchAll();
   }
 
   render() {
-    return <div>Test all requests</div>;
+    const requestsList = this.props.all
+      .slice()
+      .map(req => <ReqCard key={req.id} data={req} />);
+
+    return <div>{requestsList}</div>;
   }
 }
-export default RequestCollections;
+export default ReqCol;

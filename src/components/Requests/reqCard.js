@@ -9,7 +9,8 @@ const ReqCard = ({ data }) => {
         <Card.Body>
           <Card.Title>{data.title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">
-            <small>{data.location}</small> | <small>Date</small>
+            <small>{data.location}</small> | <small>{data.start_date}</small>
+            <small>{data.city}</small> | <small>{data.country}</small>
           </Card.Subtitle>
           <Card.Text className="desc">{data.description}</Card.Text>
         </Card.Body>

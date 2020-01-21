@@ -27,12 +27,12 @@ class Guest extends React.Component {
                 </Link>
               </span>
             </div>
-            <div className="p-2">
+            <div className="p-2 ">
               <Link
                 className="btn btn-outline-dark"
                 to="/requests/add-new-request"
               >
-                Post needs
+                Start a post
               </Link>
             </div>
           </div>

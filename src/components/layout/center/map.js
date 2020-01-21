@@ -1,16 +1,41 @@
 import React from "react";
-import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps";
-
-function Maps() {
-  return (
-    <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }} />
-  );
-}
-
-const MyMapComponent = withScriptjs(withGoogleMap(Maps));
+import {
+  withScriptjs,
+  withGoogleMap,
+  GoogleMap,
+  Marker
+} from "react-google-maps";
 
 class Map extends React.Component {
   render() {
+    const { coords, currentlongitude, currentlatitude } = this.props;
+
+    const MyMapComponent = withScriptjs(
+      withGoogleMap(props => (
+        <GoogleMap
+          defaultZoom={8}
+          defaultCenter={{
+            lat: Number(currentlatitude),
+            lng: Number(currentlongitude)
+          }}
+        >
+          {this.props.all
+            .slice()
+            .filter(function(req) {
+              return req.country === coords.country;
+            })
+            .map(request => (
+              <Marker
+                key={request.id}
+                position={{
+                  lat: Number(request.latitude),
+                  lng: Number(request.longitude)
+                }}
+              />
+            ))}
+        </GoogleMap>
+      ))
+    );
     return (
       <div className="d-flex flex-column bg-white shadow">
         <div className="d-flex  p-2" style={{ height: `100%`, width: "100%" }}>

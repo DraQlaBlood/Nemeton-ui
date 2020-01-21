@@ -10,7 +10,9 @@ import Spinner from "../../lib/components/spinner/load";
 @observer
 class Login extends React.Component {
   componentDidMount() {
+    this.props.user.signInWithoutResources();
     this.props.user.signIn();
+      
   }
 
   submitForm = e => {

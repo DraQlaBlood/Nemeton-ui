@@ -29,8 +29,8 @@ class Member extends React.Component {
               <div className="d-flex">
                 <div className="p-2 nav-link text-uppercase">
                   <i className="fas fa-comments fa-x"></i>
-                  <Link to="/users/chatrooms">
-                    <span className="pl-2">Messaging</span>
+                  <Link className="pl-2 liens " to="/users/chatrooms">
+                    Messaging
                   </Link>
                 </div>
                 <div className="p-2 nav-link text-uppercase">
@@ -47,14 +47,17 @@ class Member extends React.Component {
                       <div className="d-flex flex-column">
                         <div className="p-2">{user.email}</div>
                         <div className="p-2">
-                          <NavDropdown.Item href="#">
+                          <Link
+                            className="dropdown-item"
+                            to="/users/my-profile"
+                          >
                             View profile
-                          </NavDropdown.Item>
+                          </Link>
                         </div>
                       </div>
                       <hr />
                       <NavDropdown.Item href="#action/3.2">
-                        Another action
+                        Account settings
                       </NavDropdown.Item>
                       <NavDropdown.Item href="#action/3.3">
                         Something
@@ -66,12 +69,12 @@ class Member extends React.Component {
                     </div>
                   </NavDropdown>
                 </div>
-                <div>
+                <div className="ml-5">
                   <Link
-                    className="btn btn-outline-dark"
+                    className="btn btn-outline-dark "
                     to="/requests/add-new-request"
                   >
-                    Post needs
+                    Start a post
                   </Link>
                 </div>
               </div>

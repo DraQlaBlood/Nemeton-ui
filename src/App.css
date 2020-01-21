@@ -7,6 +7,9 @@ body , html{
 .App {
   height: 100vh;
 }
+.bg-global{
+  background: #fd7e14;
+}
 
 .btn-global-orange{
   background: #fd7e14;
@@ -33,12 +36,21 @@ body , html{
 }
 
 .nav-link:hover , .liens:hover{
-  color: #fd7e14 !important;
+  color: #fd7e14 !important; 
 }
 
-.profileEnTete{
+.profileprincipal, .profileEnTete{
   background: #fd7e14;
   height:45px;
+}
+
+.memberLinks{
+  color: #000;
+  text-decoration: none !important;
+}
+.memberLinks:hover{
+  color: #fd7e14 !important;
+  text-decoration-line: none !important;
 }
 /* End Navigation */
 /* Index */
