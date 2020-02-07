@@ -17,6 +17,7 @@ class User {
   @observable currentlatitude = null;
   @observable currentlongitude = null;
   @observable coords = null;
+  @observable account_id = null;
 
   @action setIsLoading(status) {
     this.isLoading = status;
@@ -26,13 +27,14 @@ class User {
     this.isSingningIn = status;
   }
 
-  @action setSignedIn(status, email, firstName, lastName, user_id) {
+  @action setSignedIn(status, email, firstName, lastName, user_id, account_id) {
     this.signedIn = status;
     if (status && email) {
       this.email = email;
       this.firstName = firstName;
       this.lastName = lastName;
       this.user_id = user_id;
+      this.account_id = account_id;
     }
   }
 
@@ -43,14 +45,16 @@ class User {
       email: localStorage.getItem("email"),
       firstName: localStorage.getItem("firstName"),
       lastName: localStorage.getItem("lastName"),
-      user_id: Number(localStorage.getItem("user_id"))
+      user_id: Number(localStorage.getItem("user_id")),
+      account_id: localStorage.getItem("account_id")
     };
     if (store.email && store.authentication_token) {
       this.signInFromStorageWithoutResources(
         store.email,
         store.firstName,
         store.lastName,
-        store.user_id
+        store.user_id,
+        store.account_id
       );
     } else if (email && password) {
       this.createSession(email, password);
@@ -61,7 +65,8 @@ class User {
     email,
     firstName,
     lastName,
-    user_id
+    user_id,
+    account_id
   ) {
     const response = await Api.get(this.sessions);
     const status = await response.status;
@@ -71,9 +76,13 @@ class User {
       this.firstName = firstName;
       this.lastName = lastName;
       this.user_id = user_id;
+      this.account_id = account_id;
       this.signedIn = true;
       this.isLoading = false;
-      history.push("/welcome");
+
+      //console.log(this.account_id)
+
+      history.push(`/welcome/accounts/${this.account_id}`);
     } else {
       this.signOut();
     }
@@ -86,7 +95,8 @@ class User {
       email: localStorage.getItem("email"),
       firstName: localStorage.getItem("firstName"),
       lastName: localStorage.getItem("lastName"),
-      user_id: Number(localStorage.getItem("user_id"))
+      user_id: Number(localStorage.getItem("user_id")),
+      account_id: localStorage.getItem("account_id")
     };
 
     if (store.email && store.authentication_token) {
@@ -94,7 +104,8 @@ class User {
         store.email,
         store.firstName,
         store.lastName,
-        store.user_id
+        store.user_id,
+        store.account_id
       );
     } else if (email && password) {
       this.createSession(email, password);
@@ -104,7 +115,13 @@ class User {
     }
   }
 
-  @action async signInFromStorage(email, firstName, lastName, user_id) {
+  @action async signInFromStorage(
+    email,
+    firstName,
+    lastName,
+    user_id,
+    account_id
+  ) {
     this.setIsLoading(true);
     const response = await Api.get(this.sessions);
     const status = await response.status;
@@ -114,10 +131,9 @@ class User {
       this.firstName = firstName;
       this.lastName = lastName;
       this.user_id = user_id;
+      this.account_id = account_id;
       this.signedIn = true;
       this.isLoading = false;
-
-      //history.push("/welcome");
     } else {
       this.signOut();
     }
@@ -146,7 +162,7 @@ class User {
   }
 
   async createSession(email, password) {
-    console.log("logging in");
+    //console.log("logging in");
     this.setIsLoading(true);
     const response = await Api.post(this.sessions, { email, password });
 
@@ -155,22 +171,42 @@ class User {
     if (status === 201) {
       const body = await response.json();
       const { user } = body.data;
+
+      console.log("accounts", user.accounts.length);
       localStorage.setItem("token", user.authentication_token);
       localStorage.setItem("email", user.email);
       localStorage.setItem("firstName", user.firstName);
       localStorage.setItem("lastName", user.lastName);
       localStorage.setItem("user_id", user.id);
 
-      this.setIsLoading(false);
-      this.setSignedIn(
-        true,
-        user.email,
-        user.firstName,
-        user.lastName,
-        user.id
-      );
+      if (user.accounts.length > 0) {
+        localStorage.setItem("account_id", user.accounts[0].slug);
+        this.setSignedIn(
+          true,
+          user.email,
+          user.firstName,
+          user.lastName,
+          user.id,
+          user.accounts[0].slug
+        );
 
-      history.push("/welcome");
+        this.setIsLoading(false);
+
+        history.push(`/welcome`);
+      } else {
+        this.setSignedIn(
+          true,
+          user.email,
+          user.firstName,
+          user.lastName,
+          user.id,
+          localStorage.getItem("account_id")
+        );
+
+        this.setIsLoading(false);
+
+        history.push(`/welcome`);
+      }
     } else {
       console.log("error");
     }
@@ -193,10 +229,12 @@ class User {
     localStorage.removeItem("firstName");
     localStorage.removeItem("lastName");
     localStorage.removeItem("user_id");
+    localStorage.removeItem("account_id");
     this.email = null;
     this.firstName = null;
     this.lastName = null;
     this.user_id = null;
+    this.account_id = null;
     this.coords = {};
     this.signedIn = false;
     this.isLoading = false;
@@ -205,6 +243,7 @@ class User {
 
   /*Getting user coordinates*/
   @action async getCoords() {
+    this.setIsLoading(true);
     const resp = await Api.get(this.coordinates);
     const stat = await resp.status;
 
@@ -231,6 +270,7 @@ class User {
         this.coords = { city, country };
 
         this.setIsSingningIn(false);
+        this.setIsLoading(false);
       } else {
         this.currentlatitude = bodycurrent.latitude;
         this.currentlongitude = bodycurrent.longitude;
@@ -240,8 +280,10 @@ class User {
         this.coords = { city, country };
 
         this.setIsSingningIn(false);
+        this.setIsLoading(false);
       }
     }
+    
   }
 }
 export default new User();

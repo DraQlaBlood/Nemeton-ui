@@ -18,6 +18,7 @@ class Profile extends React.Component {
     const { user } = this.props;
     const { isLoading } = this.props.user;
     const { all } = this.props.requests;
+
     console.log(user);
     if (isLoading) {
       return (
@@ -50,6 +51,8 @@ class Profile extends React.Component {
                 </div>
               </div>
             </section>
+            
+
             <section id="en-tete" className=" p-2 ">
               <div className=" shadow border">
                 <div className="bg-white p-2 d-flex flex-column">

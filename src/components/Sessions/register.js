@@ -1,6 +1,8 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 
+import { Link } from "react-router-dom";
+
 import { Form, Button, Row, Col } from "react-bootstrap";
 import Spinner from "../../lib/components/spinner/load";
 
@@ -37,10 +39,10 @@ class Signup extends React.Component {
       );
     }
     return (
-      <div className="flex-grow-1 signin">
+      <div className="flex-grow-1 container signin">
         <hr />
         <Row>
-          <Col md={6} className="mx-auto">
+          <Col sm={10} md={6} className="mx-auto">
             <Form
               noValidate
               className="p-2 p-md-3 border bg-white shadow my-auto text-center"
@@ -49,7 +51,9 @@ class Signup extends React.Component {
               <hr />
               <Form.Row>
                 <Form.Group className="col-sm-12 col-md-6">
-                  <Form.Label>Firstname</Form.Label>
+                  <div className="d-none d-xs-none d-sm-none d-md-none d-lg-block">
+                    <Form.Label>Firstname</Form.Label>
+                  </div>
                   <Form.Control
                     type="text"
                     ref={node => {
@@ -59,7 +63,9 @@ class Signup extends React.Component {
                   />
                 </Form.Group>
                 <Form.Group className="col-sm-12 col-md-6">
-                  <Form.Label>Lastname</Form.Label>
+                  <div className="d-none d-xs-none d-sm-none d-md-none d-lg-block">
+                    <Form.Label>Lastname</Form.Label>
+                  </div>
                   <Form.Control
                     type="text"
                     ref={node => {
@@ -72,7 +78,9 @@ class Signup extends React.Component {
 
               <Form.Row>
                 <Form.Group className="col-sm-12 col-md-6">
-                  <Form.Label>Password</Form.Label>
+                  <div className="d-none d-xs-none d-sm-none d-md-none d-lg-block">
+                    <Form.Label>Password</Form.Label>
+                  </div>
                   <Form.Control
                     type="password"
                     ref={node => {
@@ -82,7 +90,9 @@ class Signup extends React.Component {
                   />
                 </Form.Group>
                 <Form.Group className="col-sm-12 col-md-6">
-                  <Form.Label>Confirm Password</Form.Label>
+                  <div className="d-none d-xs-none d-sm-none d-md-none d-lg-block">
+                    <Form.Label>Confirm Password</Form.Label>
+                  </div>
                   <Form.Control
                     type="password"
                     ref={node => {
@@ -93,7 +103,9 @@ class Signup extends React.Component {
                 </Form.Group>
               </Form.Row>
               <Form.Group>
-                <Form.Label>Email address</Form.Label>
+                <div className="d-none d-xs-none d-sm-none d-md-none d-lg-block">
+                  <Form.Label>Email address</Form.Label>
+                </div>
                 <Form.Control
                   type="email"
                   ref={node => {
@@ -112,6 +124,14 @@ class Signup extends React.Component {
             </Form>
           </Col>
         </Row>
+        <div className="d-flex pt-2 justify-content-center">
+          <div className=" text-center p-3">
+            Already have an account?
+            <Link className="liens ml-2" to="/users/new-user-session">
+              Login
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }

@@ -1,0 +1,14 @@
+.network {
+  height: 100%;
+}
+.orgSide {
+  height: 100vh;
+}
+.banner{
+    height:350px;
+    width: 100vw;
+    
+    background-image:linear-gradient(to right, #fff 40%, #00FFFF00),
+    url('https://images.unsplash.com/photo-1580786534413-89ee81c23a98?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60');
+    
+}

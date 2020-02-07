@@ -4,9 +4,13 @@ import Member from "./member";
 
 import { inject, observer } from "mobx-react";
 
-@inject("user")
+@inject("user","account")
 @observer
 class Navigation extends React.Component {
+  componentDidMount(){
+    this.props.account.fetchAll();
+  }
+
   render() {
     const user = this.props.user.signedIn;
     return (

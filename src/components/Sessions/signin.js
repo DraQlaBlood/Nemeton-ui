@@ -12,7 +12,6 @@ class Login extends React.Component {
   componentDidMount() {
     this.props.user.signInWithoutResources();
     this.props.user.signIn();
-      
   }
 
   submitForm = e => {
@@ -35,19 +34,21 @@ class Login extends React.Component {
       );
     }
     return (
-      <div className="flex-grow-1  signin">
+      <div className="flex-grow-1 container signin">
         <hr />
         <Row>
-          <Col sm={10} md={4} className="mx-auto">
+          <Col sm={10} md={6} className="mx-auto ">
             <Form
               noValidate
               className="p-2 p-md-3 border-none bg-white shadow my-auto text-center"
               onSubmit={this.submitForm}
             >
-              <h3>Log in to your account</h3>
+              <h3>Log in</h3>
               <hr />
               <Form.Group>
-                <Form.Label>Email address</Form.Label>
+                <div className="d-none d-xs-none d-sm-none d-md-none d-lg-block">
+                  <Form.Label>Email address</Form.Label>
+                </div>
                 <Form.Control
                   type="email"
                   ref={node => {
@@ -57,7 +58,9 @@ class Login extends React.Component {
                 />
               </Form.Group>
               <Form.Group>
-                <Form.Label>Password</Form.Label>
+                <div className="d-none d-xs-none d-sm-none d-md-none d-lg-block">
+                  <Form.Label>Password</Form.Label>
+                </div>
                 <Form.Control
                   ref={node => {
                     this.password = node;
@@ -75,7 +78,7 @@ class Login extends React.Component {
             </Form>
           </Col>
         </Row>
-        <div className="d-flex pt-2 justify-content-center">
+        <div className="d-flex  flex-column pt-2 justify-content-center">
           <div className=" text-center p-3">
             <Link className="liens ml-2" to="/users/password-reset">
               Forgot your password?
