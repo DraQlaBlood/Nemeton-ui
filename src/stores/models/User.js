@@ -200,7 +200,7 @@ class User {
           user.firstName,
           user.lastName,
           user.id,
-          localStorage.getItem("account_id")
+          localStorage.getItem("null")
         );
 
         this.setIsLoading(false);

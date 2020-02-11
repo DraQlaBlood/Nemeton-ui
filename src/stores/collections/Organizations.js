@@ -26,11 +26,10 @@ class Organizations {
     }
   }
 
-  @action async add(name, address) {
+  @action async add(name,about) {
     this.account_id = localStorage.getItem("account_id");
     const response = await Api.post(`/` + this.account_id + this.path, {
-      name,
-      address
+      name,about
     });
     const status = await response.status;
 

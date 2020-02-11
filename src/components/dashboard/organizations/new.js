@@ -15,11 +15,11 @@ class Organization extends React.Component {
     e.preventDefault();
 
     let name = this.refs.name.value;
-    let address = this.refs.address.value;
+    let about = this.refs.about.value;
 
     //console.log(this.props.account.account_id);
 
-    this.props.organization.add(name,address);
+    this.props.organization.add(name,about);
   };
 
   render() {
@@ -52,11 +52,10 @@ class Organization extends React.Component {
                         md={12}
                         controlId="exampleForm.ControlInput2"
                       >
-                        <Form.Label>Organization address </Form.Label>
+                        <Form.Label>About your organization</Form.Label>
                         <Form.Control
-                          type="text"
-                          ref="address"
-                          placeholder="address"
+                          as="textarea" rows="3"
+                          ref="about"
                         />
                       </Form.Group>
                     </Form.Row>

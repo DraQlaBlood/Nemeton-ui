@@ -7,8 +7,11 @@
 .banner{
     height:350px;
     width: 100vw;
-    
-    background-image:linear-gradient(to right, #fff 40%, #00FFFF00),
-    url('https://images.unsplash.com/photo-1580786534413-89ee81c23a98?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60');
-    
+    background-image:linear-gradient(to right, #fff 25%, #00FFFF00),
+    url('https://images.unsplash.com/photo-1581101833721-f3e3d07893b5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60');
+    background-size: cover;
+    object-fit: cover;
+}
+.orgDetails{
+  height: 100%;
 }

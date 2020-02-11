@@ -34,7 +34,7 @@ const SidebarContent = props => {
     ? { ...styles.sidebar, ...props.style }
     : styles.sidebar;
 
-  const accountName = localStorage.getItem("account_id").toUpperCase();
+  const accountName = localStorage.getItem("account_id");
 
   return (
     <MaterialTitlePanel title={accountName} style={style}>
