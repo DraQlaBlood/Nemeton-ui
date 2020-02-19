@@ -7,9 +7,18 @@ class Organizations {
 
   @observable all = [];
   @observable isLoading = false;
-  @observable org = [];
+  @observable org = {};
+  @observable followers=[]
   @observable orgAccount_id = [];
-  @observable test = null;
+  @observable likers = [];
+
+  @observable showModal= false;
+  @observable type = { pub: "public", pri: "private" }
+
+
+  @action async setShowModal(status){
+    this.showModal = status;
+  }
 
   @action setIsLoading(status) {
     this.isLoading = status;
@@ -18,7 +27,7 @@ class Organizations {
   @action async fetchAll() {
     this.account_id = localStorage.getItem("account_id");
     this.isLoading = false;
-    const response = await Api.get(`/` + this.account_id + this.path);
+    const response = await Api.get(this.path);
     const status = await response.status;
     if (status === 200) {
       const json = await response.json();
@@ -41,11 +50,25 @@ class Organizations {
       console.log("Bad behaviour ! Very bad behaviour");
     }
   }
-  @action async find() {
-    let organization = this.all.filter(organization => organization.slug === this.test);
-    this.org = organization[0];
-    //console.log("org name ", this.org[0].slug)
-    this.orgAccount_id = organization[0].account_id;
+  @action async find(organization_id) {
+    let organization = this.all.filter(function(organization) {
+      return organization.slug === organization_id})[0].id;
+    //console.log(" data: ", organization)
+
+    const response = await Api.get(this.path+`/`+organization);
+    const status = await response.status;
+    if (status === 200) {
+      const json = await response.json();
+      this.org  = await json.data.organization;
+    }
+    //console.log(" data: ", this.org)
+    this.followers= this.org.followers;
+    this.likers = this.org.likers;
+    //console.log("org name ", this.org.slug)
+    //this.orgAccount_id = this.org.account_id;
   }
+
+ 
+
 }
 export default new Organizations();

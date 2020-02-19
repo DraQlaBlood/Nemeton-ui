@@ -9,6 +9,8 @@ import ReqCol from "../Requests/collections";
 import Spinner from "../../lib/components/spinner/load";
 import GetGreetingTime from "../navigation/homepage";
 
+import './dashboard.css'
+
 function View(props) {
   const isMap = props.isMap;
   const all = props.all;
@@ -30,7 +32,7 @@ function View(props) {
   }
 }
 
-@inject("user", "requests", "account", "views")
+@inject("user", "account", "views")
 @observer
 class Layout extends React.Component {
   componentDidMount = async () => {
@@ -62,14 +64,6 @@ class Layout extends React.Component {
 
     return (
       <div className=" flex-grow-1 d-flex flex-column">
-        
-        <div className="flex-grow-1">
-          <View
-            isMap={isMap}
-            /*currentlatitude={currentlatitude}
-          currentlongitude={currentlongitude}*/
-          />
-        </div>
         <div className="flex-shrink-0">
           <div className="salutationCellphone d-none d-block d-sm-block d-md-block d-lg-none bg-white fixed-bottom mx-3">
             <div className="d-flex justify-content-center">
@@ -84,40 +78,27 @@ class Layout extends React.Component {
               />
             </div>
           </div>
-          <div className="d-none d-xs-none d-sm-none d-md-none d-lg-block bg-white fixed-bottom">
-            <div className="d-flex flex-column px-3">
-              <div className="form-group has-search pt-2">
-                <span className="fa fa-search form-control-feedback"></span>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search for posts"
-                />
-              </div>
-              <div className="d-flex text-center pb-2">
-                <div className=" flex-fill">
-                  <span className="pr-2">0</span>
-                  <span>
-                    <small>in your neighborhood</small>
-                  </span>
-                </div>
-
-                <div className=" flex-fill">
-                  <span className="pr-2">0</span>
-                  <span>
-                    <small>in your country</small>
-                  </span>
-                </div>
-
-                <div className=" flex-fill">
-                  <span className="pr-2">0</span>
-                  <span>
-                    <small>Around the world</small>
-                  </span>
-                </div>
+          <div className=" layout-search-area d-none d-xs-none d-sm-none d-md-none d-lg-block ">
+            <div className="d-flex justify-content-end px-3">
+                
+                <div className=" form-group has-search pt-2">
+                  <span className="fa fa-search form-control-feedback"></span>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search for posts"
+                  />
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="flex-grow-1">
+          <View
+            isMap={isMap}
+            /*currentlatitude={currentlatitude}
+          currentlongitude={currentlongitude}*/
+          />
         </div>
       </div>
     );

@@ -10,8 +10,7 @@ import Layout from "./layout"
 class Dashboard extends React.Component {
   componentDidMount = async () => {
     await this.props.user.signIn();
-    const { account } = this.props;
-    account.fetchAll();
+    await this.props.account.fetchAll();
   };
 
   render() {

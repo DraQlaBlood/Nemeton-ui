@@ -8,6 +8,7 @@ class Account {
   @observable all = [];
   @observable isLoading = false;
   @observable account_id = [];
+  @observable account_det=[]
 
   @action setIsLoading(status) {
     this.isLoading = status;
@@ -42,6 +43,7 @@ class Account {
     let account= this.all.filter(function(account) {
       return account.slug === user.account_id;
     })[0];
+    this.account_det = account
     this.account_id  = account.id
   }
 

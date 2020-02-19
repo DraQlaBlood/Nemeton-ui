@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 
 import AddRequest from "./components/Requests/new";
 import RequestCollections from "./components/Requests/collections";
-import ShowOrganization from "./components/dashboard/network/organization/show";
+import OrgModel from "./components/dashboard/organizations/show";
 
 import Login from "./components/Sessions/signin";
 import Signup from "./components/Sessions/register";
@@ -19,7 +19,7 @@ import Settings from "./components/dashboard/accounts/settings";
 import Organization from "./components/dashboard/organizations/new"
 import Explorer from "./components/dashboard/explorer";
 import Notifications from "./components/dashboard/notifications";
-import ShowAll from "./components/dashboard/network/organization";
+import OrgCollections from "./components/dashboard/organizations";
 
 
 
@@ -51,8 +51,8 @@ const Routes = () => (
     <Route path="/explorer" component={Explorer}/>
     <Route path="/my-notifications" component={Notifications} />
 
-    <Route path="/organizations/:orgName" component={ShowOrganization}/>
-    <Route path="/organizations" component={ShowAll}/>
+    <Route path="/show/:organization_slug" component={OrgModel}/>
+    <Route path="/organizations" component={OrgCollections}/>
   </Switch>
 );
 export default Routes;

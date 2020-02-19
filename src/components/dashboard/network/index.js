@@ -1,17 +1,20 @@
 import React from "react";
 
 import { inject, observer } from "mobx-react";
-import { Card, Tabs, Tab, Row, Nav, Col } from "react-bootstrap";
+import { Card, Row, Nav, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./network.css";
 
-@inject("user", "account", "organization", "views")
+@inject("user", "account", "organization", "views", "globalparams")
 @observer
 class Newtwork extends React.Component {
   componentDidMount = async () => {
     await this.props.user.signIn();
     await this.props.account.fetchAll();
     await this.props.organization.fetchAll();
+
+    await this.props.account.find();
+    await this.props.globalparams.findAll();
   };
 
   showOrg = async orgName => {
@@ -20,7 +23,7 @@ class Newtwork extends React.Component {
   };
 
   render() {
-    const { all, org } = this.props.organization;
+    const { all} = this.props.organization;
     
 
     return (
@@ -41,13 +44,32 @@ class Newtwork extends React.Component {
                 </div>
                 <Nav className=" flex-column">
                   <span className="text-uspanpercase pl-4 pb-2 font-weight-bold">
-                    Shorcuts
-                  </span>
-                  {all.slice(0, 10).map(org => {
+                    Shorcuts ...my organizations
+                  </span> 
+                  {all.slice(0, 5).map(org => {
                     return (
                       <span key={org.id}>
                         <Link
-                          to={"organizations/" + org.slug}
+                          to={"show/" + org.slug}
+                          className="pl-4 text-capitalize text-decoration-none text-reset"
+                        >
+                          {org.name}
+                        </Link>
+                      </span>
+                    );
+                  })}
+                  <div className="d-flex justify-content-end">...see more</div>
+                </Nav>
+
+                <Nav className=" flex-column">
+                  <span className="text-uspanpercase pl-4 pb-2 font-weight-bold">
+                     Others organizations
+                  </span>
+                  {this.props.globalparams.all.slice(0, 10).map(org => {
+                    return (
+                      <span key={org.id}>
+                        <Link
+                          to={"show/" + org.slug}
                           className="pl-4 text-capitalize text-decoration-none text-reset"
                         >
                           {org.name}

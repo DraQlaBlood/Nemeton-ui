@@ -21,11 +21,11 @@ html {
   border-top: none;
 }
 .bg-global {
-  background: #fd7e14;
+  background: #B22234;
 }
 
 .btn-global-orange {
-  background: #fd7e14;
+  background: #B22234;
   border: none;
 }
 .btn-global-orange:hover {
@@ -34,7 +34,7 @@ html {
   color: #421e01;
 }
 .form-control:focus {
-  border-color: #fd7e14;
+  border-color: #B22234;
   box-shadow: none;
   -webkit-box-shadow: none;
 }
@@ -52,12 +52,12 @@ html {
 
 .nav-link:hover,
 .liens:hover {
-  color: #fd7e14 !important;
+  color: #B22234 !important;
 }
 
 .profileprincipal,
 .profileEnTete {
-  background: #fd7e14;
+  background: #B22234;
   height: 45px;
 }
 
@@ -66,7 +66,7 @@ html {
   text-decoration: none !important;
 }
 .memberLinks:hover {
-  color: #fd7e14 !important;
+  color: #B22234 !important;
   text-decoration-line: none !important;
 }
 /* End Navigation */
@@ -101,7 +101,7 @@ html {
 .btn-filter:hover {
   display: block;
   color: #000;
-  background: #fd7e14;
+  background: #B22234;
   border: none;
 }
 .card-index {
@@ -175,7 +175,7 @@ html {
   border-top: none;
   border-left: none;
   border-right: none;
-  border-bottom: 4px solid #fd7e14 !important;
+  border-bottom: 4px solid #B22234 !important;
 }
 .nav-tabs .nav-link.active {
   background-color: transparent !important;

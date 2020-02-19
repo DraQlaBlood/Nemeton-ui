@@ -1,4 +1,4 @@
-import requests from "./collections/Requests";
+
 import categories from "./collections/Categories";
 
 import organization from "./collections/Organizations";
@@ -6,14 +6,15 @@ import user from "./models/User";
 import views from "./utils/View";
 import account from "./models/Account";
 import globalparams from "./utils/GlobalParams";
+import membership from './models/Membership'
 
 const stores = {
-  requests,
   categories,
   user,
   views,
   account,
   organization,
+  membership,
   globalparams
 };
 export default stores;

@@ -19,6 +19,8 @@ class GlobalParams {
     this.isSidebarOpen = status;
   }
 
+  
+
   @action async findAll() {
     const response = await Api.get(this.path);
     const status = await response.status;
