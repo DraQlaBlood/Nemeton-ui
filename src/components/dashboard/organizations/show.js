@@ -24,7 +24,9 @@ class OrgModel extends React.PureComponent {
   };
 
   componentDidUpdate = async prevProps => {
+    
     if (this.props.membership.notification) {
+      await this.props.user.signIn();
       await this.props.account.fetchAll();
       await this.props.account.find();
       const { organization_slug } = this.props.match.params;
@@ -79,22 +81,26 @@ class OrgModel extends React.PureComponent {
 
   likeOrganization = async () => {
     await this.props.membership.showNotification(true);
+
     const { organization_slug } = this.props.match.params;
     await this.props.membership.like(organization_slug);
-
-    this.props.membership.resetNotification(false);
+    if (this.props.membership.notification) {
+      this.props.membership.resetNotification(false);
+    }
   };
 
   disLikeOrganization = async () => {
     await this.props.membership.showNotification(true);
+
     const { organization_slug } = this.props.match.params;
     await this.props.membership.disLike(organization_slug);
-
-    this.props.membership.resetNotification(false); 
+    if (this.props.membership.notification) {
+      this.props.membership.resetNotification(false);
+    }
   };
 
   render() {
-    const { all, org, followers, likers } = this.props.organization;
+    const { all, org, followers, likers ,orgAccount_id} = this.props.organization;
     const { account_id } = this.props.account;
 
     let org_member = false;
@@ -104,14 +110,13 @@ class OrgModel extends React.PureComponent {
       }
     }
 
-console.log(likers.length)
-
-    let org_liker = false;
-    for (var j = 0; j < likers.length; i++) {
+    let liker = false;
+    for (var j = 0; j < likers.length; j++) {
       if (likers[j].id === account_id) {
-        org_liker = true;
+        liker = true;
       }
     }
+
 
     return (
       <div className="flex-grow-1 bg-white">
@@ -125,11 +130,14 @@ console.log(likers.length)
                 <i className="fas fa-map-marker pr-2"></i> Location
               </span>
               <span>
-                <i className="fas fa-user-friends pr-2"></i> Members . type of
-                group
+                <i className="fas fa-user-friends pr-2"></i> {followers.length}{" "}
+                Members . type of group
+              </span>
+              <span>
+                <i className="fas fa-users pr-2"></i> Liked by {likers.length}{" "} people
               </span>
               <div className=" d-flex flex-column ">
-                <span className="py-2">Organizer name</span>
+                <span className="py-2">Created by {orgAccount_id}</span>
                 <Link to="#">Contact organizer</Link>
               </div>
             </div>
@@ -141,16 +149,20 @@ console.log(likers.length)
               <Link to="/organizations" className="mr-5 showLinks">
                 <i className="fas fa-arrow-left px-2"></i>Back
               </Link>
-              {org_liker && (
-                <Link
+              {liker && (<Link
                   to="#"
                   onClick={this.disLikeOrganization}
-                  className="px-2 "
+                  className="px-2 showLinks"
                 >
-                  Unlike 
-                </Link>
-              )}
-              
+                  Dislike
+                </Link>)}
+                {!liker && (<Link
+                  to="#"
+                  onClick={this.likeOrganization}
+                  className="px-2 showLinks"
+                >
+                  Like
+                </Link>)}
               <Link to="#" className="px-2 showLinks">
                 Share
               </Link>
@@ -190,7 +202,14 @@ console.log(likers.length)
                 <div className="row py-3">
                   <div className="col-md-3">
                     <p>Owners</p>
-                    <span>{org.account_id}</span>
+                    <span>
+                      <img
+                        src="https://via.placeholder.com/50"
+                        alt="alt images"
+                        className="rounded-circle mr-2"
+                      />
+                      {orgAccount_id}
+                    </span>
                   </div>
                   <div className="col-md-9">
                     <p>Members</p>
@@ -213,7 +232,6 @@ console.log(likers.length)
               </Tab>
               <Tab eventKey="Discussions" title="Discussions"></Tab>
               <Tab eventKey="Posts / Events" title="Posts / Events"></Tab>
-              <Tab eventKey="Our Calendar" title="Our Calendar"></Tab>
             </Tabs>
           </div>
           <div className="col-md-4 p-3 ">

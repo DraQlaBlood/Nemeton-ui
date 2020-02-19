@@ -8,6 +8,8 @@ class MemberShips {
 
   @observable notification = false;
   
+  @observable liked = false;
+
   @action showNotification(status) {
     this.notification = status;
   }

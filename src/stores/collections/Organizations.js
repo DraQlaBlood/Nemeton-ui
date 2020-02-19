@@ -65,7 +65,7 @@ class Organizations {
     this.followers= this.org.followers;
     this.likers = this.org.likers;
     //console.log("org name ", this.org.slug)
-    //this.orgAccount_id = this.org.account_id;
+    this.orgAccount_id = this.org.account_id;
   }
 
  
