@@ -1,0 +1,17 @@
+.messageAccordion{
+    overflow-y: scroll;
+    max-height: 60vh;
+}
+.card-header{
+    background-color: #3C3B6E;
+}
+.btn,.btn:hover{
+    color: #fff;
+    text-decoration: none;
+}
+h3, .showChat{
+    color: #3C3B6E;
+}
+.showChat:hover{
+    text-decoration: underline;
+}

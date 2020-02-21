@@ -1,4 +1,5 @@
 const endpoint = "http://localhost:4000";
+export const API_WS_ROOT = "ws://localhost:4000/cable";
 
 const headers = () => {
   const h = new Headers();

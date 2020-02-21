@@ -8,6 +8,9 @@ import { store } from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import "animate.css";
 import "./organization.css";
+import Messaging from "../../chatrooms";
+
+
 
 @inject("user", "account", "organization", "membership", "globalparams")
 @observer
@@ -100,8 +103,9 @@ class OrgModel extends React.PureComponent {
   };
 
   render() {
-    const { all, org, followers, likers ,orgAccount_id} = this.props.organization;
+    const { org, followers, likers ,orgAccount_id} = this.props.organization;
     const { account_id } = this.props.account;
+    const { organization_slug } = this.props.match.params;
 
     let org_member = false;
     for (var i = 0; i < followers.length; i++) {
@@ -185,15 +189,15 @@ class OrgModel extends React.PureComponent {
                 </Link>
               )}
             </div>
-            {org_member && (
+            {(org_member || org.account_id === account_id) && (
               <Link to="#" className="showLinks">
                 Post a new article
               </Link>
             )}
           </div>
         </div>
-        <div className="container row mt-3 mx-auto">
-          <div className="col-md-8 p-3 ">
+        <div className="container row mt-3 mx-auto showBody">
+          <div className="col-md-12 p-3 ">
             <Tabs defaultActiveKey="About" id="uncontrolled-tab-example">
               <Tab eventKey="About" title="About">
                 <div className="py-3">{org.about}</div>
@@ -230,62 +234,13 @@ class OrgModel extends React.PureComponent {
                   </div>
                 </div>
               </Tab>
-              <Tab eventKey="Discussions" title="Discussions"></Tab>
+              <Tab eventKey="Discussions" title="Discussions">
+                {((org_member || org.account_id === account_id ) && <Messaging organization_slug={organization_slug}/>) || (<p>Member access only</p>)}
+              </Tab>
               <Tab eventKey="Posts / Events" title="Posts / Events"></Tab>
             </Tabs>
           </div>
-          <div className="col-md-4 p-3 ">
-            <div className="p-4 border mb-2">
-              <h5>From the same organizer</h5>
-              <div className="d-flex flex-column py-2">
-                {all
-                  .filter(
-                    organization =>
-                      organization.account_id === org.account_id &&
-                      organization.slug !== org.slug
-                  )
-                  .slice(0, 5)
-                  .map(organization => {
-                    return (
-                      <span key={organization.id}>
-                        <Link
-                          to={`/show/${organization.slug}`}
-                          className="pl-2 text-capitalize text-decoration-none text-reset"
-                        >
-                          {organization.name}
-                        </Link>
-                      </span>
-                    );
-                  })}
-                <div className="d-flex justify-content-end">...see more</div>
-              </div>
-            </div>
-            <div className="p-4 border mb-2">
-              <h5>Suggested Organizations</h5>
-              <div className="d-flex flex-column py-2">
-                {all
-                  .filter(
-                    organization =>
-                      organization.account_id !== org.account_id &&
-                      organization.account_id !== account_id
-                  )
-                  .slice(0, 5)
-                  .map(org => {
-                    return (
-                      <span key={org.id}>
-                        <Link
-                          to={`/show/${org.slug}`}
-                          className="pl-2 text-capitalize text-decoration-none text-reset"
-                        >
-                          {org.name}
-                        </Link>
-                      </span>
-                    );
-                  })}
-                <div className="d-flex justify-content-end">...see more</div>
-              </div>
-            </div>
-          </div>
+          
         </div>
       </div>
     );

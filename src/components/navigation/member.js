@@ -31,7 +31,7 @@ class Member extends React.Component {
       pullRight: true
     };
     return (
-      <div className="d-flex flex-column bg-white ">
+      <div className="d-flex flex-column bg-white sticky-top">
         <div className="d-none d-block d-sm-block d-md-block d-lg-none">
           <Sidebar {...sidebarProps} />
         </div>

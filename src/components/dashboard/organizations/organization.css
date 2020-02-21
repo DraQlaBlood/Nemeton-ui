@@ -13,3 +13,6 @@
 .showLinks{
     color: #B22234;
 }
+.showBody{
+    min-height: 80vh;
+}

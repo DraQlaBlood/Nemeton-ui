@@ -1,5 +1,6 @@
 
 import categories from "./collections/Categories";
+import messaging from "./collections/Messaging"
 
 import organization from "./collections/Organizations";
 import user from "./models/User";
@@ -15,6 +16,7 @@ const stores = {
   account,
   organization,
   membership,
-  globalparams
+  globalparams,
+  messaging
 };
 export default stores;

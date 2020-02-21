@@ -42,7 +42,7 @@ class Organizations {
     });
     const status = await response.status;
 
-    if (status === 201) {
+    if (status === 201) { 
       this.fetchAll();
     } else if (status > 400 && status < 499) {
       console.log("Unprocessable");
