@@ -4,12 +4,10 @@ import { inject, observer } from "mobx-react";
 
 import Map from "./layout/center/map";
 
-import ReqCol from "../Requests/collections";
-
 import Spinner from "../../lib/components/spinner/load";
-import GetGreetingTime from "../navigation/homepage";
+import GetGreetingTime from "../Navigation/homepage";
 
-import './dashboard.css'
+import "./dashboard.css";
 
 function View(props) {
   const isMap = props.isMap;
@@ -28,7 +26,7 @@ function View(props) {
       />
     );
   } else {
-    return <ReqCol all={all} coords={coords} />;
+    return <div />;
   }
 }
 
@@ -76,19 +74,6 @@ class Layout extends React.Component {
                 className="form-control"
                 placeholder="Search for posts"
               />
-            </div>
-          </div>
-          <div className=" layout-search-area d-none d-xs-none d-sm-none d-md-none d-lg-block ">
-            <div className="d-flex justify-content-end px-3">
-                
-                <div className=" form-group has-search pt-2">
-                  <span className="fa fa-search form-control-feedback"></span>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search for posts"
-                  />
-              </div>
             </div>
           </div>
         </div>

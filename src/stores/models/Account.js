@@ -8,10 +8,19 @@ class Account {
   @observable all = [];
   @observable isLoading = false;
   @observable account_id = [];
-  @observable account_name=[]
+  @observable account=[]
+  @observable accountOrganizations = [];
+  @observable followedOrganizations=[];
+  @observable likedOrganizations=[];
+
+  @observable showModal= false;
 
   @action setIsLoading(status) {
     this.isLoading = status;
+  }
+
+  @action async setShowModal(status){
+    this.showModal = status;
   }
 
   @action async fetchAll() {
@@ -25,8 +34,8 @@ class Account {
     this.setIsLoading(false);
   }
 
-  @action async add(name) {
-    const response = await Api.post(this.path, { name });
+  @action async add(name, description) {
+    const response = await Api.post(this.path, { name , description});
     const status = await response.status;
 
     if (status === 201) {
@@ -39,12 +48,33 @@ class Account {
     }
   }
 
-  @action find() {
+  @action async find() {
+    this.setIsLoading(true)
     let account= this.all.filter(function(account) {
       return account.slug === user.account_id;
     })[0];
+
+    console.log("Debugging account id : ",account.id)
+    const response = await Api.get(this.path+`/`+account.id);
+    const status = await response.status;
+    if (status === 200) {
+      const json = await response.json();
+      this.account = await json.data
+      this.followedOrganizations = account.following;
+      this.accountOrganizations = account.organizations;
+      this.likedOrganizations = account.liking;
+    }
     //this.account_name = account.name
     this.account_id  = account.id
+    this.setIsLoading(false)
+  }
+
+  @action getAccountInfos(id){
+    let acc= this.all.filter(function(acc) {
+      return acc.id === id;
+    })[0];
+    
+    return acc;
   }
 
   hasAccount(account) {

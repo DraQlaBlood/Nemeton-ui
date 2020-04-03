@@ -1,16 +1,18 @@
 import { observable, action } from "mobx";
+import Api from "../../lib/helpers/api/index";
 
 class Categories {
-  @observable all = [];
+  path="/categories"
+  @observable categories = [];
 
   @observable isLoading = false;
 
-  @action async fetchAll() {
-    this.isLoading = false;
-    const response = await fetch("http://localhost:4000/categories");
+  @action async findAll() {
+    const response = await Api.get(this.path);
     const status = await response.status;
     if (status === 200) {
-      this.all = await response.json();
+      const json = await response.json();
+      this.categories = await json;
     }
   }
 }

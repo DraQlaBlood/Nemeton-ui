@@ -1,5 +1,5 @@
 import React from "react";
-import { ActionCable } from "react-actioncable-provider";
+import { ActionCableConsumer } from "react-actioncable-provider";
 import Cable from "./Cables";
 import NewConversationForm from "./NewConversationForm";
 import MessagesArea from "./MessagesArea";
@@ -12,8 +12,8 @@ import { inject, observer } from "mobx-react";
 @observer
 class Messaging extends React.Component {
   componentDidMount = async () => {
-    await this.props.user.signIn();
-    await this.props.messaging.fetchConversations(this.props.organization_slug);
+    //await this.props.user.signIn();
+    await this.props.messaging.fetchConversations();
   };
 
   handleClick = id => {
@@ -22,17 +22,18 @@ class Messaging extends React.Component {
 
   handleReceivedConversation = response => {
     const { conversation } = response;
-    //const conversations = [...this.props.messaging.conversations];
+    console.log("Got a new conversation");
     this.props.messaging.setConversations([
       ...this.props.messaging.conversations,
       conversation
     ]);
+    console.log(this.props.messaging.conversations.length);
   };
 
   handleReceivedMessage = response => {
     const { message } = response;
+    console.log("Got a new message");
     const conversations = [...this.props.messaging.conversations];
-    console.log(conversations);
 
     const conversation = conversations.find(
       conversation => conversation.id === message.conversation_id
@@ -53,20 +54,20 @@ class Messaging extends React.Component {
     const { showModal } = this.props.organization;
     const { organization_slug } = this.props;
     return (
-      <div className="flex-grow-1 container p-2">
-        <ActionCable
+      <div className="flex-grow-1  p-2">
+        <ActionCableConsumer
           channel={{ channel: "ConversationsChannel" }}
           onReceived={this.handleReceivedConversation}
         />
-        {this.props.messaging.conversations.length ? (
+        {conversations.length ? (
           <Cable
-            conversations={conversations}
+            conversations={this.props.messaging.conversations}
             handleReceivedMessage={this.handleReceivedMessage}
           />
         ) : null}
         <div className="organization-banner text-white d-flex flex-column p-3 d-none d-xs-none d-sm-none d-md-none d-lg-block">
           <div className=" d-flex justify-content-between">
-            <h4>Ask a question this organization a question !</h4>
+            <h4>Ask a question</h4>
             <div className="d-flex">
               <Button className="btn-red" onClick={this.handleShow}>
                 Create
@@ -84,22 +85,24 @@ class Messaging extends React.Component {
         </div>
 
         <div className="row">
-          <div className="col-md-4">
-            <div className="d-flex flex-column">
-              <div className="mt-3">
-                {mapConversations(conversations, this.handleClick)}
-              </div>
-            </div>
-          </div>
+          
           <div className="col-md-8 ">
             {activeConversation ? (
               <MessagesArea
                 conversation={findActiveConversation(
-                  conversations,
+                  this.props.messaging.conversations,
                   activeConversation
                 )}
               />
             ) : null}
+          </div>
+          <div className="col-md-4">
+            <div className="d-flex flex-column">
+              <div className="mt-3">
+                {mapConversations(this.props.messaging.conversations,
+                  this.props.organization_slug, this.handleClick)}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -114,25 +117,45 @@ const findActiveConversation = (conversations, activeConversation) => {
   );
 };
 
-const mapConversations = (conversations, handleClick) => {
-  return conversations.map(conversation => {
-    return (
-      <div className="p-2 border d-flex flex-column mb-2" key={conversation.id}>
+const mapConversations = (conversations,organization_slug, handleClick) => {
+  return conversations
+    .slice()
+    .filter(function(conversation){
+      return conversation.organization.slug === organization_slug
+    })
+    .sort(function(a, b) {
+      if (new Date(a.created_at) > new Date(b.created_at)) {
+        return -1;
+      } else if (new Date(a.created_at) < new Date(b.created_at)) {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
+    .map(conversation => {
+      return (
         <div
-          onClick={() => handleClick(conversation.id)}
-          className="p-2 text-capitalize font-weight-bold showChat"
+          className=" conversationDiv p-2 border d-flex flex-column mb-2"
+          key={conversation.id}
         >
-          {conversation.title}
-        </div>
-        <div className="d-flex justify-content-end">
-          <div className="d-flex justify-content-end p-2">
-            <span className="px-2">
-              <i className="fas fa-reply"></i>
-            </span>
-            <span className="px-2">{conversation.messages.length} replies</span>
+          <div
+            onClick={() => handleClick(conversation.id)}
+            className="p-2 text-capitalize font-weight-bold showChat text-truncate"
+            style={{ maxWidth: "300px" }}
+          >
+            {conversation.title}
+          </div>
+          <div className="d-flex justify-content-end">
+            <div className="d-flex justify-content-end p-2">
+              <span className="px-2">
+                <i className="fas fa-reply"></i>
+              </span>
+              <span className="px-2">
+                {conversation.messages.length} replies
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    );
-  });
+      );
+    });
 };

@@ -18,31 +18,32 @@ class NewMessageForm extends React.Component {
     const { conversation_id } = this.props.messaging;
     let message = this.refs.message.value;
     this.props.messaging.addMessage(message, conversation_id);
-    this.refs.message.value='';
+    this.refs.message.value = "";
   };
 
   render = () => {
     return (
-      <div className="newMessageForm mt-3">
-        <Form noValidate>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Control
-              as="textarea"
-              rows="3"
-              ref="message"
-              placeholder="send a reply"
-            />
-          </Form.Group>
-          <div className="d-flex justify-content-end">
-            <Button
-              size="lg"
-              onClick={this.handleSubmit}
-              className=" btn-global-orange"
-            >
-              Send
-            </Button>
-          </div>
-        </Form>
+      <div className="newMessageForm mt-3 d-flex">
+        <div className="w-100 ">
+          <Form noValidate>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Control
+                as="textarea"
+                rows="1"
+                ref="message"
+                placeholder="send a reply"
+              />
+            </Form.Group>
+          </Form>
+        </div>
+        <div className="flex-shrink-1 px-2 ">
+          <Button
+            onClick={this.handleSubmit}
+            className=" btn-global-orange "
+          >
+            Send
+          </Button> 
+        </div>
       </div>
     );
   };

@@ -58,6 +58,7 @@
     "react-actioncable-provider": "^2.0.0",
     "react-app-polyfill": "^1.0.4",
     "react-bootstrap": "^1.0.0-beta.14",
+    "react-datetime-picker": "^2.9.0",
     "react-dev-utils": "^9.1.0",
     "react-dom": "^16.10.2",
     "react-google-maps": "^9.4.5",

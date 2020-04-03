@@ -1,5 +1,7 @@
 const endpoint = "http://localhost:4000";
-export const API_WS_ROOT = "ws://localhost:4000/cable";
+export const API_WS_ROOT = `ws://localhost:4000/cable?slug=${localStorage.getItem(
+  "account_id"
+)}`;
 
 const headers = () => {
   const h = new Headers();

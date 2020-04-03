@@ -11,13 +11,12 @@ class User {
   @observable isLoading = false;
   @observable signedIn = false;
   @observable email = null;
-  @observable firstName = null;
-  @observable lastName = null;
-  @observable user_id = null;
+  @observable account_id = null;
+  
   @observable currentlatitude = null;
   @observable currentlongitude = null;
   @observable coords = null;
-  @observable account_id = null;
+  
 
   @action setIsLoading(status) {
     this.isLoading = status;
@@ -27,13 +26,10 @@ class User {
     this.isSingningIn = status;
   }
 
-  @action setSignedIn(status, email, firstName, lastName, user_id, account_id) {
+  @action setSignedIn(status, email,  account_id) {
     this.signedIn = status;
     if (status && email) {
       this.email = email;
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.user_id = user_id;
       this.account_id = account_id;
     }
   }
@@ -43,17 +39,11 @@ class User {
     const store = {
       authentication_token: localStorage.getItem("token"),
       email: localStorage.getItem("email"),
-      firstName: localStorage.getItem("firstName"),
-      lastName: localStorage.getItem("lastName"),
-      user_id: Number(localStorage.getItem("user_id")),
       account_id: localStorage.getItem("account_id")
     };
     if (store.email && store.authentication_token) {
       this.signInFromStorageWithoutResources(
         store.email,
-        store.firstName,
-        store.lastName,
-        store.user_id,
         store.account_id
       );
     } else if (email && password) {
@@ -63,9 +53,6 @@ class User {
 
   @action async signInFromStorageWithoutResources(
     email,
-    firstName,
-    lastName,
-    user_id,
     account_id
   ) {
     const response = await Api.get(this.sessions);
@@ -73,9 +60,6 @@ class User {
 
     if (status === 200) {
       this.email = email;
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.user_id = user_id;
       this.account_id = account_id;
       this.signedIn = true;
       this.isLoading = false;
@@ -93,18 +77,12 @@ class User {
     const store = {
       authentication_token: localStorage.getItem("token"),
       email: localStorage.getItem("email"),
-      firstName: localStorage.getItem("firstName"),
-      lastName: localStorage.getItem("lastName"),
-      user_id: Number(localStorage.getItem("user_id")),
       account_id: localStorage.getItem("account_id")
     };
 
     if (store.email && store.authentication_token) {
       this.signInFromStorage(
         store.email,
-        store.firstName,
-        store.lastName,
-        store.user_id,
         store.account_id
       );
     } else if (email && password) {
@@ -117,9 +95,6 @@ class User {
 
   @action async signInFromStorage(
     email,
-    firstName,
-    lastName,
-    user_id,
     account_id
   ) {
     this.setIsLoading(true);
@@ -128,9 +103,6 @@ class User {
 
     if (status === 200) {
       this.email = email;
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.user_id = user_id;
       this.account_id = account_id;
       this.signedIn = true;
       this.isLoading = false;
@@ -161,6 +133,7 @@ class User {
     }
   }
 
+
   async createSession(email, password) {
     //console.log("logging in");
     this.setIsLoading(true);
@@ -172,21 +145,15 @@ class User {
       const body = await response.json();
       const { user } = body.data;
 
-      console.log("accounts", user.accounts.length);
+      //console.log("accounts", user.accounts.length);
       localStorage.setItem("token", user.authentication_token);
       localStorage.setItem("email", user.email);
-      localStorage.setItem("firstName", user.firstName);
-      localStorage.setItem("lastName", user.lastName);
-      localStorage.setItem("user_id", user.id);
 
       if (user.accounts.length > 0) {
         localStorage.setItem("account_id", user.accounts[0].slug);
         this.setSignedIn(
           true,
           user.email,
-          user.firstName,
-          user.lastName,
-          user.id,
           user.accounts[0].slug
         );
 
@@ -197,14 +164,9 @@ class User {
         this.setSignedIn(
           true,
           user.email,
-          user.firstName,
-          user.lastName,
-          user.id,
           localStorage.getItem("null")
         );
-
         this.setIsLoading(false);
-
         history.push(`/welcome`);
       }
     } else {
@@ -226,14 +188,8 @@ class User {
   @action signOut() {
     localStorage.removeItem("email");
     localStorage.removeItem("token");
-    localStorage.removeItem("firstName");
-    localStorage.removeItem("lastName");
-    localStorage.removeItem("user_id");
     localStorage.removeItem("account_id");
     this.email = null;
-    this.firstName = null;
-    this.lastName = null;
-    this.user_id = null;
     this.account_id = null;
     this.coords = {};
     this.signedIn = false;

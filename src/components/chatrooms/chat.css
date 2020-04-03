@@ -9,9 +9,7 @@
     color: #fff;
     text-decoration: none;
 }
-h3, .showChat{
+.showChat{
     color: #3C3B6E;
 }
-.showChat:hover{
-    text-decoration: underline;
-}
+

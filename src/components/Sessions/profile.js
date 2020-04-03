@@ -6,7 +6,7 @@ import Spinner from "../../lib/components/spinner/load";
 import Dashboard from "./profile/dashboard";
 import Feed from "./profile/feed";
 
-@inject("user", "requests")
+@inject("user")
 @observer
 class Profile extends React.Component {
   componentDidMount = async () => {

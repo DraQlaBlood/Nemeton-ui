@@ -8,9 +8,7 @@ class Guest extends React.Component {
         <div className="d-flex ">
           <div className="px-4">
             <Link className="liens" to="/">
-              <strong>
-                <span className="text-uppercase ">Nemeton</span>
-              </strong>
+            <span className="text-uppercase font-weight-bold ">Nemeton</span>
             </Link>
           </div>
           <div className="ml-auto px-2 d-flex">

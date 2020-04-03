@@ -1,12 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { NavDropdown } from "react-bootstrap";
+import {
+  NavDropdown,
+  Button,
+  Card,
+  Modal,
+  Form,
+  Row,
+  Col
+} from "react-bootstrap";
 import { inject, observer } from "mobx-react";
 
 import Sidebar from "react-sidebar";
 import SidebarContent from "./sidemenu/sidebar_content";
+import AddAccount from "../dashboard/accounts/new";
 
-@inject("user", "account", "globalparams")
+@inject("user", "account","views")
 @observer
 class Member extends React.Component {
   signOut = e => {
@@ -21,27 +30,41 @@ class Member extends React.Component {
     this.props.account.hasAccount(account_id);
   };
 
+  handleClose = async () => {
+    await this.props.account.setShowModal(false);
+  };
+  handleShow = async () => {
+    await this.props.account.setShowModal(true);
+  };
+
   render() {
     const { user } = this.props;
+    const { all, showModal } = this.props.account;
 
     const sidebar = <SidebarContent />;
     const sidebarProps = {
       sidebar,
-      open: this.props.globalparams.isSidebarOpen,
+      open: this.props.views.isSidebarOpen,
       pullRight: true
     };
     return (
-      <div className="d-flex flex-column bg-white sticky-top">
+      <div className="d-flex flex-column bg-white ">
         <div className="d-none d-block d-sm-block d-md-block d-lg-none">
           <Sidebar {...sidebarProps} />
         </div>
+        <Modal show={showModal} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Create new account</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <AddAccount />
+          </Modal.Body>
+        </Modal>
 
         <div className="d-flex border-bottom">
           <div className="px-4 py-3 d-none d-xs-none d-sm-none d-md-none d-lg-block">
             <Link className="nav-link text-uppercase" to="/welcome">
-              <strong>
-                <span className="text-uppercase ">Nemeton</span>
-              </strong>
+                <span className="text-uppercase font-weight-bold ">Nemeton</span>
             </Link>
           </div>
           <div className="ml-auto px-2 d-flex ">
@@ -58,11 +81,7 @@ class Member extends React.Component {
                     <i className="fas fa-users fa-x"></i>
                   </Link>
                 </div>
-                <div className="px-3 nav-link">
-                  <Link className=" liens " to="/explorer">
-                    <i className="fas fa-search fa-x"></i>
-                  </Link>
-                </div>
+                
                 <div className="px-3 nav-link">
                   <Link className=" liens " to="/my-notifications">
                     <i className="fas fa-bell fa-x"></i>
@@ -119,7 +138,11 @@ class Member extends React.Component {
                         </Link>
                       </div>
                       <div>
-                        <Link to="/settings" className="dropdown-item">
+                        <Link
+                          to="#"
+                          onClick={this.handleShow}
+                          className="dropdown-item"
+                        >
                           <i className=" pr-2 fas fa-user-plus"></i> Add Account
                         </Link>
                       </div>
@@ -149,7 +172,7 @@ class Member extends React.Component {
                           account
                         </Link>
                       </div>
-
+                      
                       <div>
                         <Link
                           to="#"
@@ -179,19 +202,13 @@ class Member extends React.Component {
                 <Link className=" liens " to="/network">
                   <i className="fas fa-users fa-x"></i>
                 </Link>
-              </div>
-
-              <div className="p-3 nav-link">
-                <Link className=" liens " to="/explorer">
-                  <i className="fas fa-search fa-x"></i>
-                </Link>
-              </div>
+              </div>s
 
               <div className="p-3 nav-link">
                 <Link className=" liens " to="/my-notifications">
                   <i className="fas fa-bell fa-x"></i>
                 </Link>
-              </div>
+              </div> 
               <div className="d-flex">
                 <div className=" p-3 nav-link">
                   <Link className=" liens " to="/users/chatrooms">
@@ -201,11 +218,11 @@ class Member extends React.Component {
               </div>
               <div className="p-3 nav-link">
                 <Link
-                  className=" liens "
+                  className="liens"
                   to="#"
                   onClick={() =>
-                    this.props.globalparams.setSidebar(
-                      !this.props.globalparams.isSidebarOpen
+                    this.props.views.setSidebar(
+                      !this.props.views.isSidebarOpen
                     )
                   }
                 >

@@ -43,7 +43,7 @@ const SidebarContent = props => {
           to="/users/my-profile"
           style={styles.sidebarLink}
           onClick={() =>
-            store.globalparams.setSidebar(!store.globalparams.isSidebarOpen)
+            store.views.setSidebar(!store.views.isSidebarOpen)
           }
         >
           <i className=" pr-2 fas fa-user-cog"></i> Account management
@@ -52,7 +52,7 @@ const SidebarContent = props => {
           to="/settings"
           style={styles.sidebarLink}
           onClick={() =>
-            store.globalparams.setSidebar(!store.globalparams.isSidebarOpen)
+            store.views.setSidebar(!store.views.isSidebarOpen)
           }
         >
           <i className=" pr-2 fas fa-sitemap"></i> Organizations
@@ -61,7 +61,7 @@ const SidebarContent = props => {
           to="/organizations"
           style={styles.sidebarLink}
           onClick={() =>
-            store.globalparams.setSidebar(!store.globalparams.isSidebarOpen)
+            store.views.setSidebar(!store.views.isSidebarOpen)
           }
         >
           <i className=" pr-2 fas fa-bookmark"></i> Saved
@@ -70,7 +70,7 @@ const SidebarContent = props => {
           to="/settings"
           style={styles.sidebarLink}
           onClick={() =>
-            store.globalparams.setSidebar(!store.globalparams.isSidebarOpen)
+            store.views.setSidebar(!store.views.isSidebarOpen)
           }
         >
           <i className=" pr-2 fas fa-newspaper"></i> Posts
@@ -80,7 +80,7 @@ const SidebarContent = props => {
           to="/settings"
           style={styles.sidebarLink}
           onClick={() =>
-            store.globalparams.setSidebar(!store.globalparams.isSidebarOpen)
+            store.views.setSidebar(!store.views.isSidebarOpen)
           }
         >
           <i className=" pr-2 fas fa-user-plus"></i> Add Account
@@ -89,7 +89,7 @@ const SidebarContent = props => {
           to="/settings"
           style={styles.sidebarLink}
           onClick={() =>
-            store.globalparams.setSidebar(!store.globalparams.isSidebarOpen)
+            store.views.setSidebar(!store.views.isSidebarOpen)
           }
         >
           <i className=" pr-2 fas fa-id-badge"></i> Add Organization
@@ -100,7 +100,7 @@ const SidebarContent = props => {
           to="/settings"
           style={styles.sidebarLink}
           onClick={() =>
-            store.globalparams.setSidebar(!store.globalparams.isSidebarOpen)
+            store.views.setSidebar(!store.views.isSidebarOpen)
           }
         >
           <i className="pr-2 fas fa-question-circle"></i> Help
@@ -109,7 +109,7 @@ const SidebarContent = props => {
           to="/settings"
           style={styles.sidebarLink}
           onClick={() =>
-            store.globalparams.setSidebar(!store.globalparams.isSidebarOpen)
+            store.views.setSidebar(!store.views.isSidebarOpen)
           }
         >
           <i className="pr-2 fas fa-exclamation-circle"></i> About
@@ -118,7 +118,7 @@ const SidebarContent = props => {
           to="/settings"
           style={styles.sidebarLink}
           onClick={() =>
-            store.globalparams.setSidebar(!store.globalparams.isSidebarOpen)
+            store.views.setSidebar(!store.views.isSidebarOpen)
           }
         >
           <i className=" pr-2 fas fa-toggle-on"></i> Switch account

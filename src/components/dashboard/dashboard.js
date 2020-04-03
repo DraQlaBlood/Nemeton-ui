@@ -2,8 +2,8 @@ import React from "react";
 
 import { inject, observer } from "mobx-react";
 
-import Bundle from "./accountBundle";
-import Layout from "./layout"
+import Layout from "./layout";
+import AddAccount from "./accounts/new";
 
 @inject("user", "account")
 @observer
@@ -15,10 +15,10 @@ class Dashboard extends React.Component {
 
   render() {
     const { all } = this.props.account;
+    const {user}  = this.props
 
-    if (all.length === 0) return <Bundle />;
-
-    return <Layout />
+    if (user.account_id===null && all.length === 0) return <AddAccount />;
+    else return <Layout />;
   }
 }
 export default Dashboard;

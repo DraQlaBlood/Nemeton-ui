@@ -1,9 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import AddRequest from "./components/Requests/new";
-import RequestCollections from "./components/Requests/collections";
-import OrgModel from "./components/dashboard/organizations/show";
+import OrgModel from './collections/Organizations/show'
 
 import Login from "./components/Sessions/signin";
 import Signup from "./components/Sessions/register";
@@ -14,12 +12,11 @@ import Landing from "./components/landing";
 import Dashboard from "./components/dashboard/dashboard";
 
 import Messaging from "./components/chatrooms/index";
-import Network from "./components/dashboard/network/index";
 import Settings from "./components/dashboard/accounts/settings";
-import Organization from "./components/dashboard/organizations/new"
-import Explorer from "./components/dashboard/explorer";
 import Notifications from "./components/dashboard/notifications";
-import OrgCollections from "./components/dashboard/organizations";
+import OrgCollections from "./collections/Organizations/index";
+import Network from "./components/Network";
+import Discussion from "./collections/Discussions/show";
 
 
 
@@ -30,11 +27,6 @@ const Routes = () => (
   <Switch>
     <Route path="/" exact component={Landing} />
     <Route path="/welcome" component={Dashboard} />
-    <Route path="/requests/add-new-request" component={AddRequest} />
-    <Route
-      path="/requests/requests-collections"
-      component={RequestCollections}
-    />
 
     <Route path="/users/new-user-session" component={Login} />
     <Route path="/users/my-profile" component={Profile} />
@@ -44,15 +36,15 @@ const Routes = () => (
     <Route path="/users/chatrooms" component={Messaging} />
 
     <Route path="/settings" component={Settings}/>
-    <Route path='/new-organization' component={Organization}/>
 
 
     <Route path='/network' component={Network}/>
-    <Route path="/explorer" component={Explorer}/>
     <Route path="/my-notifications" component={Notifications} />
 
     <Route path="/show/:organization_slug" component={OrgModel}/>
     <Route path="/organizations" component={OrgCollections}/>
+
+    <Route path="/discussion/:title/:id" component={Discussion}/>
   </Switch>
 );
 export default Routes;
