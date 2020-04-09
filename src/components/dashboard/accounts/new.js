@@ -16,7 +16,6 @@ class AddAccount extends React.Component {
   };
 
   render() {
-    const { user } = this.props;
     return (
       <div className="flex-grow-1 text-center">
         <div className="d-flex justify-content-center py-2">

@@ -2,8 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   NavDropdown,
-  Button,
-  Card,
   Modal,
   Form,
   Row,
@@ -15,7 +13,7 @@ import Sidebar from "react-sidebar";
 import SidebarContent from "./sidemenu/sidebar_content";
 import AddAccount from "../dashboard/accounts/new";
 
-@inject("user", "account","views")
+@inject("user", "account", "views")
 @observer
 class Member extends React.Component {
   signOut = e => {
@@ -39,7 +37,7 @@ class Member extends React.Component {
 
   render() {
     const { user } = this.props;
-    const { all, showModal } = this.props.account;
+    const { showModal } = this.props.account;
 
     const sidebar = <SidebarContent />;
     const sidebarProps = {
@@ -64,8 +62,21 @@ class Member extends React.Component {
         <div className="d-flex border-bottom">
           <div className="px-4 py-3 d-none d-xs-none d-sm-none d-md-none d-lg-block">
             <Link className="nav-link text-uppercase" to="/welcome">
-                <span className="text-uppercase font-weight-bold ">Nemeton</span>
+              <span className="text-uppercase font-weight-bold ">Nemeton</span>
             </Link>
+          </div>
+
+          <div className=" mx-5 px-3 py-3 flex-fill">
+            <Form>
+              <Row>
+                <Col>
+                  <Form.Control
+                    placeholder="Search events, organizations or categories"
+                    className="bg-light text-dark"
+                  />
+                </Col>
+              </Row>
+            </Form>
           </div>
           <div className="ml-auto px-2 d-flex ">
             <div className="px-3 py-3 d-none d-xs-none d-sm-none d-md-none d-lg-block">
@@ -81,7 +92,7 @@ class Member extends React.Component {
                     <i className="fas fa-users fa-x"></i>
                   </Link>
                 </div>
-                
+
                 <div className="px-3 nav-link">
                   <Link className=" liens " to="/my-notifications">
                     <i className="fas fa-bell fa-x"></i>
@@ -119,7 +130,7 @@ class Member extends React.Component {
                       <div>
                         <Link className="dropdown-item" to="/settings">
                           <i className=" pr-2 fas fa-user-cog"></i>Account
-                          management
+                          settings
                         </Link>
                       </div>
                       <div>
@@ -172,7 +183,7 @@ class Member extends React.Component {
                           account
                         </Link>
                       </div>
-                      
+
                       <div>
                         <Link
                           to="#"
@@ -202,13 +213,12 @@ class Member extends React.Component {
                 <Link className=" liens " to="/network">
                   <i className="fas fa-users fa-x"></i>
                 </Link>
-              </div>s
-
+              </div>
               <div className="p-3 nav-link">
                 <Link className=" liens " to="/my-notifications">
                   <i className="fas fa-bell fa-x"></i>
                 </Link>
-              </div> 
+              </div>
               <div className="d-flex">
                 <div className=" p-3 nav-link">
                   <Link className=" liens " to="/users/chatrooms">
@@ -221,9 +231,7 @@ class Member extends React.Component {
                   className="liens"
                   to="#"
                   onClick={() =>
-                    this.props.views.setSidebar(
-                      !this.props.views.isSidebarOpen
-                    )
+                    this.props.views.setSidebar(!this.props.views.isSidebarOpen)
                   }
                 >
                   <i className="fas fa-user-circle fa-x"></i>

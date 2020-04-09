@@ -13,6 +13,7 @@ class Messaging {
   @observable activeConversation = null;
 
   @observable isLoading =false;
+  @observable isChatOpen = false;
   @observable text = '';
   @observable convesation_id = null;
 
@@ -20,6 +21,10 @@ class Messaging {
 
   @action setConversations(conversations) {
     this.conversations = conversations;
+  }
+
+  @action setChatOption(isChatOpen) {
+    this.isChatOpen = isChatOpen;
   }
 
 

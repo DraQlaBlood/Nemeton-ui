@@ -1,0 +1,22 @@
+.top{
+    height: 20vh;
+}
+.colour-blue{
+    background: #3C3b6e;
+    color: #fff;
+  }
+
+  .btn-settings{
+      background: transparent !important;
+      border-radius: 0% !important;
+      padding-bottom: 1rem;
+      padding-top: 1rem;
+      font-weight: bold;
+      font-size: 14px;
+  }
+  .btn-settings.active{
+      border-top: none;
+      border-bottom: none !important;
+      border-left:4px solid #3C3b6e !important;
+      border-right: none;
+  }

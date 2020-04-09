@@ -4,6 +4,7 @@ class Views {
   @observable isMap = true;
   @observable isSidebarOpen= false;
 
+
   @action setSidebar(status){
     this.isSidebarOpen = status;
   }

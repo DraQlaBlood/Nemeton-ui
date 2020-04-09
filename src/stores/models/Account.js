@@ -13,6 +13,9 @@ class Account {
   @observable followedOrganizations=[];
   @observable likedOrganizations=[];
 
+
+  @observable bioUpdate = false;
+
   @observable showModal= false;
 
   @action setIsLoading(status) {
@@ -21,6 +24,10 @@ class Account {
 
   @action async setShowModal(status){
     this.showModal = status;
+  }
+
+  @action async setbioUpdate(bioUpdate){
+    this.bioUpdate = bioUpdate;
   }
 
   @action async fetchAll() {

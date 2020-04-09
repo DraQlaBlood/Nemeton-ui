@@ -29,9 +29,9 @@ class NewMessageForm extends React.Component {
             <Form.Group controlId="formBasicEmail">
               <Form.Control
                 as="textarea"
-                rows="1"
+                rows="2"
                 ref="message"
-                placeholder="send a reply"
+                placeholder="Post a comment"
               />
             </Form.Group>
           </Form>

@@ -53,8 +53,7 @@ class Network extends React.Component {
     const { account_id } = this.props.account;
     const {
       conversations,
-      isLoading,
-      activeConversation
+      isLoading
     } = this.props.messaging;
     const { events } = this.props.event;
 
@@ -85,9 +84,9 @@ class Network extends React.Component {
           return (content = [...content, conversation]);
         });
 
-        for (var k = 0; k < events.length; k++) {
-          if (all[i].id === events[k].organization_id) {
-            eventContent = [...eventContent, events[k]];
+        for (var v = 0; v < events.length; v++) {
+          if (all[i].id === events[v].organization_id) {
+            eventContent = [...eventContent, events[v]];
           }
         }
       } else {
@@ -98,7 +97,7 @@ class Network extends React.Component {
     }
 
     return (
-      <div className=" flex-grow-1 pt-5">
+      <div className=" flex-grow-1  bg-light pt-3">
         <div className="mx-5 d-flex justify-content-center">
           <ActionCableConsumer
             channel={{ channel: "ConversationsChannel" }}
@@ -129,10 +128,9 @@ class Network extends React.Component {
                     }
                   })
                   .map(conversation => {
-                    console.log("account name: ", conversation.account_id);
                     return (
-                      <div className=" my-2" key={conversation.id}>
-                        <div className="bg-light p-2">
+                      <div className=" my-2 " key={conversation.id}>
+                        <div className=" shadow  rounded-top rounded-bottom-0 p-2">
                           <img
                             src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
                             alt="alt images"
@@ -159,7 +157,7 @@ class Network extends React.Component {
                             ).fromNow()}
                           </small>
                         </div>
-                        <div className="p-2 d-flex">
+                        <div className="bg-white shadow p-2 d-flex">
                           <div className="mr-2">
                             <img
                               src="https://images.unsplash.com/photo-1504898770365-14faca6a7320?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
@@ -226,8 +224,3 @@ class Network extends React.Component {
 }
 export default Network;
 
-const findActiveConversation = (conversations, activeConversation) => {
-  return conversations.find(
-    conversation => conversation.id === activeConversation
-  );
-};

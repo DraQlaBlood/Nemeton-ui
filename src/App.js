@@ -11,7 +11,7 @@ function App() {
     <div className="App d-flex flex-column">
       <ReactNotifications />
       <Navigation />
-      <Routes />
+      <Routes className="Component"/>
       <MessageAccordion/>
       <Footer />
     </div>

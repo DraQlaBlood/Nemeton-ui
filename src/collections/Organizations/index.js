@@ -22,7 +22,7 @@ class OrgCollections extends React.Component {
     await this.props.organization.setShowModal(true);
   };
 
-  handleCreate = async e => {
+  handleCreate = async (e) => {
     e.preventDefault();
 
     let name = this.refs.name.value;
@@ -50,12 +50,11 @@ class OrgCollections extends React.Component {
   };
 
   render() {
-    const { all, showModal } = this.props.organization;
+    const {showModal } = this.props.organization;
     const {
-      likedOrganizations,
       followedOrganizations,
       accountOrganizations,
-      isLoading
+      isLoading,
     } = this.props.account;
 
     if (isLoading) {
@@ -70,17 +69,28 @@ class OrgCollections extends React.Component {
       );
     }
     return (
-      <div className="flex-grow-1 bg-white">
+      <div className="flex-grow-1 bg-light">
         <div className="organization-banner text-white d-flex flex-column px-5 py-4 d-none d-xs-none d-sm-none d-md-none d-lg-block">
           <div className=" d-flex justify-content-between">
-            <div className="d-flex flex-column">
-              <span className="font-weight-bold text-capitalize">
-                Organization Dashboard
-              </span>
-              <span className="text-muted">
-                {" "}
-                Your dashboard with all analytics
-              </span>
+            <div className="d-flex col-md-6">
+              <div className="p-2">
+                <span className="font-weight-bold text-capitalize">
+                 Dashboard
+                </span>
+              </div>
+
+              <div className="flex-fill" id="search-area">
+                <Form>
+                  <Row>
+                    <Col>
+                      <Form.Control
+                        type="text"
+                        placeholder="Search for an organization"
+                      />
+                    </Col>
+                  </Row>
+                </Form>
+              </div>
             </div>
             <div className="d-flex">
               <Button className="btn-red" onClick={this.handleShow}>
@@ -199,79 +209,50 @@ class OrgCollections extends React.Component {
             </div>
           </div>
         </div>
-        <div className="p-2 container">
-          {(accountOrganizations.length !== 0 ||
-            followedOrganizations.length !== 0 ||
-            likedOrganizations.length !== 0) && (
-            <div className="row p-3 ">
-              <Card className="col-4 bg-card  my-2">
-                <Card.Body className="text-center font-weight-bold">
-                  <span>Organizations you liked</span>
-                  <h4>{likedOrganizations.length}</h4>
-                </Card.Body>
-              </Card>
-              <Card className="col-4 bg-card  my-2">
-                <Card.Body className="text-center font-weight-bold">
-                  <span>Organizations you are member</span>
-                  <h4>{followedOrganizations.length}</h4>
-                </Card.Body>
-              </Card>
-              <Card className="col-4 bg-card  my-2">
-                <Card.Body className="text-center font-weight-bold">
-                  <span>Organizations you have created</span>
-                  <h4>{accountOrganizations.length}</h4>
-                </Card.Body>
-              </Card>
-            </div>
-          )}
-
-          <div className="d-flex justify-content-end py-3">
-            <div className="p-2 col-md-6 " id="search-area">
-              <Form>
-                <Row>
-                  <Col>
-                    <Form.Control
-                      type="text"
-                      placeholder="Search for an organization"
-                    />
-                  </Col>
-                </Row>
-              </Form>
-            </div>
-          </div>
+        <div className="container">
           {accountOrganizations.length > 0 && (
-            <div className="p-2">
-              <div className="d-flex justify-content-between">
-                <span className="font-weight-bold pb-3">
-                  Organizations you admin
-                </span>
-                <span className="  font-weight-bold pb-3">See all . . .</span>
-              </div>
-              <div className="row">
-                {accountOrganizations.slice(0, 12).map(followed => {
-                  return (
-                    <span className="col-md-3 my-2" key={followed.id}>
-                      <Card>
-                        <Card.Body>
-                          <Link to={`/show/${followed.slug}`}>
-                            <Card.Title
-                              className="text-capitalize font-weight-bold text-truncate"
-                              style={{ maxWidth: "200px" }}
-                            >
-                              {followed.name}
-                            </Card.Title>
-                          </Link>
-                        </Card.Body>
-                        <div className="border"></div>
-                        <Card.Img
-                          variant="bottom"
-                          src="https://images.unsplash.com/photo-1464820453369-31d2c0b651af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+            <div className="d-flex flex-column">
+              {accountOrganizations.slice(0, 12).map((followed) => {
+                return (
+                  <div
+                    className="orgDisplay shadow-sm bg-white  my-2 px-2 py-3 text-dark"
+                  >
+                    <div
+                      className=" px-2 d-flex justify-content-between"
+                      key={followed.id}
+                    >
+                      <div className="d-flex">
+                        <img 
+                        src="https://images.unsplash.com/photo-1464820453369-31d2c0b651af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+                        alt=""
+                        className="imageSize mr-3"
                         />
-                      </Card>
-                    </span>
-                  );
-                })}
-              </div>
+                        <Link
+                          className="font-weight-bold text-dark"
+                          to={`/show/${followed.slug}`}
+                        >
+                          <p >{followed.name}</p>
+                        </Link>
+                        
+                      </div>
+                      <div className="d-flex text-muted">
+                        <div className="mr-5">
+                          <i className="fas fa-thumbs-up mr-2"></i> 
+                          <span>5</span>
+                        </div>
+                        <div className="mr-5">
+                          <i className="fas fa-users mr-2"></i> 
+                          <span>5</span>
+                        </div>
+                        <div>
+                          <i className="fas fa-lock mr-2"></i>
+                          <span className="text-uppercase">private</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
           {followedOrganizations.length > 0 && (
@@ -283,7 +264,7 @@ class OrgCollections extends React.Component {
                 <span className="  font-weight-bold pb-3">See all . . .</span>
               </div>
               <div className="row">
-                {followedOrganizations.slice(0, 12).map(followed => {
+                {followedOrganizations.slice(0, 12).map((followed) => {
                   return (
                     <span className="col-md-3 my-2" key={followed.id}>
                       <Card>
@@ -309,44 +290,9 @@ class OrgCollections extends React.Component {
               </div>
             </div>
           )}
-          {likedOrganizations.length > 0 && (
-            <div className="p-2">
-              <div className="d-flex justify-content-between">
-                <span className="font-weight-bold pb-3">
-                  Organizations you have liked
-                </span>
-                <span className="font-weight-bold pb-3">See all . . .</span>
-              </div>
-              <div className=" row ">
-                {likedOrganizations.slice().map(followed => {
-                  return (
-                    <span className="col-md-3 my-2" key={followed.id}>
-                      <Card>
-                        <Card.Body>
-                          <Link to={`/show/${followed.slug}`}>
-                            <Card.Title
-                              className="text-capitalize text-decoration-none text-truncate"
-                              style={{ maxWidth: "150px" }}
-                            >
-                              {followed.name}
-                            </Card.Title>
-                          </Link>
-                        </Card.Body>
-                        <div className="border"></div>
-                        <Card.Img
-                          variant="bottom"
-                          src="https://images.unsplash.com/photo-1464820453369-31d2c0b651af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-                        />
-                      </Card>
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+
           {accountOrganizations.length === 0 &&
-            followedOrganizations.length === 0 &&
-            likedOrganizations.length === 0 && <EmptyData />}
+            followedOrganizations.length === 0 && <EmptyData />}
         </div>
       </div>
     );

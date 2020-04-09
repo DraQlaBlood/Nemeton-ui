@@ -251,6 +251,7 @@ class OrgModel extends React.PureComponent {
                       <div className="picture">
                         <img
                           className="img-fluid"
+                          alt=""
                           src="https://picsum.photos/130/130?image=1027"
                         />
                       </div>

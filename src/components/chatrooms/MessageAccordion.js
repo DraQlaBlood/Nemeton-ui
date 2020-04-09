@@ -5,49 +5,45 @@ import "./chat.css";
 @inject("user", "account", "messaging")
 @observer
 class MessageAccordion extends React.Component {
+  showChat = () => {
+    this.props.messaging.setChatOption(!this.props.messaging.isChatOpen);
+  };
+
   render() {
-    const { user} = this.props;
+    const { user } = this.props;
     return (
-      <div className="col-md-3 fixed-bottom d-none d-sm-none d-md-block">
-        {user.account_id!==null && (
-          <div id="accordion" >
-            <div className="card border">
-              <div className="card-header " id="headingTwo">
-                <h5 className="mb-0">
-                  <button
-                    className="btn btn-link collapsed"
-                    data-toggle="collapse"
-                    data-target="#collapseTwo"
-                    aria-expanded="false"
-                    aria-controls="collapseTwo"
-                  >
-                    {user.account_id} - Private Messaging
-                  </button>
-                </h5>
-              </div>
-              <div
-                id="collapseTwo"
-                className="collapse"
-                aria-labelledby="headingTwo"
-                data-parent="#accordion"
-              >
-                <div className="card-body messageAccordion">
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life
-                  accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                  non cupidatat skateboard dolor brunch. Food truck quinoa
-                  nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                  aliqua put a bird on it squid single-origin coffee nulla
-                  assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
-                  beer labore wes anderson cred nesciunt sapiente ea proident.
-                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                  beer farm-to-table, raw denim aesthetic synth nesciunt you
-                  probably haven't heard of them accusamus labore sustainable
-                  VHS.
+      <div className="d-flex flex-column fixed-bottom d-none d-sm-none d-md-block mr-5">
+        <div className="d-flex justify-content-end ">
+          {this.props.messaging.isChatOpen && (
+            <div className="col-md-3 mb-4 instantChat">
+              <div className=" bg-blue topChat rounded-top border border-bottom-0 text-white d-flex justify-content-center">
+                <div className="align-items-center d-flex flex-column p-3">
+
+                  <h3>Hi Name !</h3>
+                  <p>Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry</p>
+
                 </div>
+                
               </div>
+              <div className=" bg-light bottomChat rounded-bottom border border-top-0"></div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        <div>
+          {user.account_id !== null && (
+            <div
+              className="rounded-circle chatdiv float-right mb-3 mr-5 d-flex justify-content-center "
+              onClick={this.showChat}
+            >
+              {this.props.messaging.isChatOpen && (
+                <i className="fas fa-envelope-open fa-2x align-self-center text-white"></i>
+              )}
+              {!this.props.messaging.isChatOpen && (
+                <i className="fas fa-envelope fa-2x align-self-center text-white"></i>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     );
   }

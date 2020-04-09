@@ -17,6 +17,7 @@ import Notifications from "./components/dashboard/notifications";
 import OrgCollections from "./collections/Organizations/index";
 import Network from "./components/Network";
 import Discussion from "./collections/Discussions/show";
+import AccountSetting from "./components/Settings/Account";
 
 
 
@@ -35,7 +36,7 @@ const Routes = () => (
 
     <Route path="/users/chatrooms" component={Messaging} />
 
-    <Route path="/settings" component={Settings}/>
+    <Route path="/settings" component={AccountSetting}/>
 
 
     <Route path='/network' component={Network}/>

@@ -1,6 +1,10 @@
 .organization-banner{
     background-color: #3C3B6E;
 }
+.imageSize{
+  width: 25px;
+  height: 25px;
+}
 .suggested-groups{
   overflow-x: scroll;
   overflow-y: hidden;

@@ -12,4 +12,20 @@
 .showChat{
     color: #3C3B6E;
 }
-
+.chatdiv{
+    width: 60px;
+    height: 60px;
+    background: #3C3B6E;
+}
+.instantChat{
+    height: 60vh
+}
+.bg-blue{
+    background:  #3C3B6E;
+}
+.topChat{
+    height: 30%;
+}
+.bottomChat{
+    height: 70%;
+}
