@@ -20,7 +20,6 @@ class Discussion extends React.Component {
   handleReceivedMessage = (response) => {
     const { id } = this.props.match.params;
     const { message } = response;
-    console.log("Got a new message");
     const conversations = [...this.props.messaging.conversations];
 
     const conversation = conversations.find(

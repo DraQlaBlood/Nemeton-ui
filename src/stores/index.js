@@ -8,6 +8,7 @@ import user from "./models/User";
 import views from "./utils/View";
 import account from "./models/Account";
 import membership from './models/Membership'
+import directMessaging from "./collections/DirectMessaging"
 
 const stores = {
   categories,
@@ -17,6 +18,7 @@ const stores = {
   organization,
   membership,
   messaging,
-  event
+  event,
+  directMessaging
 };
 export default stores;

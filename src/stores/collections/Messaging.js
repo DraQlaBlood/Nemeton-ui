@@ -17,7 +17,7 @@ class Messaging {
   @observable text = '';
   @observable convesation_id = null;
 
-  @observable notification = localStorage.getItem("notification");
+  @observable notification = false;
 
 
   @observable messages = [];
@@ -34,7 +34,7 @@ class Messaging {
 
   @action setNotification(notification){
     this.notification = notification;
-    localStorage.setItem("notification", this.notification);
+    
   }
 
   @action setIsLoading(isloading){

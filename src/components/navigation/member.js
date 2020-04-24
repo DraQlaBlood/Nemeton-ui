@@ -30,6 +30,7 @@ class Member extends React.Component {
     if (account.id !== conversation.account.id) {
       this.props.messaging.setNotification(true);
     }
+    localStorage.setItem("notification", this.props.messaging.notification);
   };
 
   handleReceivedMessage = (response) => {
@@ -40,7 +41,9 @@ class Member extends React.Component {
 
     if (account.id !== message.account.id) {
       this.props.messaging.setNotification(true);
+      localStorage.setItem("notification", this.props.messaging.notification);
     }
+
   };
 
   handleChange = (e) => {
@@ -58,7 +61,7 @@ class Member extends React.Component {
 
   render() {
     const { user } = this.props;
-    const { showModal, account } = this.props.account;
+    const { showModal } = this.props.account;
     const { conversations } = this.props.messaging;
     const sidebar = <SidebarContent />;
     const sidebarProps = {
