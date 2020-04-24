@@ -9,7 +9,6 @@ class Notification extends React.Component{
         await this.props.user.signIn();
         localStorage.removeItem("notification");
         this.props.messaging.setNotification(false);
-        
     }
 
     render(){

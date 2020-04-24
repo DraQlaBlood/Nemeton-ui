@@ -8,6 +8,15 @@
   height: 100%;
   top: 0;
   left: 0;
+  animation: 0.5s ease-out 0s 1 slideInFromLeft;
+}
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(200%);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .btn,
@@ -27,12 +36,9 @@
   position: relative;
   height: 75vh;
   width: 100%;
+  overflow: hidden;
 }
-.effect {
-  transition: 0.9s;
-  transition-timing-function: ease-in;
-  transform: translateY(0%);
-}
+
 .bg-blue {
   background: #3c3b6e;
 }
