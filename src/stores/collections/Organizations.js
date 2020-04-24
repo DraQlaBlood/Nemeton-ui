@@ -7,10 +7,11 @@ class Organizations {
 
   @observable all = [];
   @observable isLoading = false;
-  @observable org = {};
-  @observable followers = [];
-  @observable orgOwner = {};
-  @observable likers = [];
+  @observable organization = [];
+
+  @observable latitude=null;
+  @observable longitude=null;
+  @observable location="";
 
   @observable showModal = false;
   @observable type = { pub: "public", pri: "private" };
@@ -23,20 +24,32 @@ class Organizations {
     this.isLoading = status;
   }
 
+  @action setAddress(address){
+    this.location = address;
+  }
+  @action setLatLng(latitude, longitude){
+    this.latitude= latitude;
+    this.longitude = longitude;
+  }
+
   @action async fetchAll() {
-    this.isLoading = false;
+    this.setIsLoading(true)
     const response = await Api.get(this.path);
     const status = await response.status;
     if (status === 200) {
       const json = await response.json();
       this.all = await json.data;
+      this.setIsLoading(false)
     }
+    
   }
 
   @action async add(
     name,
     about,
     location,
+    latitude,
+    longitude,
     status,
     mail,
     facebook,
@@ -49,6 +62,8 @@ class Organizations {
       name,
       about,
       location,
+      latitude,
+      longitude,
       status,
       mail,
       facebook,
@@ -66,24 +81,16 @@ class Organizations {
       console.log("Bad behaviour ! Very bad behaviour"); 
     }
   }
-  @action async find(organization_id) {
-    let organization = this.all.filter(function(organization) {
-      return organization.slug === organization_id;
-    })[0].id;
-    //console.log(" data: ", organization)
-
-    const response = await Api.get(this.path + `/` + organization);
+  @action async findOne(organization_id) {
+    this.setIsLoading(true)
+    const response = await Api.get(this.path + `/` + organization_id);
     const status = await response.status;
     if (status === 200) {
       const json = await response.json();
-      this.org = await json.data.organization;
+      this.organization = await json.data.organization;
+
+      this.setIsLoading(false);
     }
-    //console.log(" data: ", this.org)
-    this.followers = this.org.followers;
-    this.likers = this.org.likers;
-    this.orgOwner = this.org.account;
-    //console.log("org name ", this.org.slug)
-    //this.orgAccount_id = this.org.account_id;
   }
 
   @action getOrganizationName(organization_id){

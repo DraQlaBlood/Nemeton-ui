@@ -17,88 +17,46 @@ class Network extends React.Component {
     await this.props.user.signIn();
     await this.props.organization.fetchAll();
     await this.props.event.fetchAllEvents();
-    //await this.props.account.fetchAll();
     await this.props.account.find();
     await this.props.messaging.fetchConversations();
   };
 
-  handleReceivedConversation = response => {
+  handleReceivedConversation = (response) => {
     const { conversation } = response;
     console.log("Got a new conversation");
     this.props.messaging.setConversations([
       ...this.props.messaging.conversations,
-      conversation
+      conversation,
     ]);
     console.log(this.props.messaging.conversations.length);
   };
-  handleClick = id => {
+  handleClick = (id) => {
     this.props.messaging.activeConversation = id;
   };
 
-  handleReceivedMessage = response => {
+  handleReceivedMessage = (response) => {
     const { message } = response;
     console.log("Got a new message");
     const conversations = [...this.props.messaging.conversations];
 
     const conversation = conversations.find(
-      conversation => conversation.id === message.conversation_id
+      (conversation) => conversation.id === message.conversation_id
     );
-    //const messages = [...conversation.messages];
     conversation.messages = [...conversation.messages, message];
     this.props.messaging.setConversations(conversations);
   };
 
   render() {
     const { all } = this.props.organization;
-    const { account_id } = this.props.account;
-    const {
-      conversations,
-      isLoading
-    } = this.props.messaging;
+    const { account } = this.props.account;
+    const { conversations } = this.props.messaging;
     const { events } = this.props.event;
 
-    let eventContent = [];
-    let content = [];
-
-    for (var i = 0; i < all.length; i++) {
-      if (all[i].followers.length > 0) {
-        for (var j = 0; j < all[i].followers.length; j++) {
-          //console.log(all[i].followers.length);
-          if (all[i].followers[j].id === account_id) {
-            //console.log(true);
-            all[i].conversations
-              .slice()
-              .map(conversation => (content = [...content, conversation]));
-          }
-          for (var k = 0; k < events.length; k++) {
-            if (
-              all[i].followers[j].id === account_id &&
-              all[i].id === events[k].organization_id
-            ) {
-              eventContent = [...eventContent, events[k]];
-            }
-          }
-        }
-      } else if (all[i].account.id === account_id) {
-        all[i].conversations.slice().map(conversation => {
-          return (content = [...content, conversation]);
-        });
-
-        for (var v = 0; v < events.length; v++) {
-          if (all[i].id === events[v].organization_id) {
-            eventContent = [...eventContent, events[v]];
-          }
-        }
-      } else {
-        console.log("Not member nor owner");
-      }
-
-      console.log("content", content);
-    }
+    let actualAccount = account.id;
 
     return (
-      <div className=" flex-grow-1  bg-light pt-3">
-        <div className="mx-5 d-flex justify-content-center">
+      <div className=" flex-grow-1 bg-light pt-3 mb-5">
+        <div className="mx-md-5 row">
           <ActionCableConsumer
             channel={{ channel: "ConversationsChannel" }}
             onReceived={this.handleReceivedConversation}
@@ -109,111 +67,237 @@ class Network extends React.Component {
               handleReceivedMessage={this.handleReceivedMessage}
             />
           ) : null}
-          <div className="mx-5 row">
-            <div className="col-md-8 px-2">
-              {isLoading ? (
-                <div>Loading</div>
-              ) : (
-                content
-                  .slice()
-                  .sort(function(a, b) {
-                    if (new Date(a.created_at) > new Date(b.created_at)) {
-                      return -1;
-                    } else if (
-                      new Date(a.created_at) < new Date(b.created_at)
-                    ) {
-                      return 1;
-                    } else {
-                      return 0;
-                    }
-                  })
-                  .map(conversation => {
+
+          <div className="col-md-8 col-sm-12">
+            {all.slice().map((organization) => {
+              if (
+                organization.followers.slice().filter(function (follower) {
+                  return follower.id === actualAccount;
+                }).length > 0 ||
+                organization.account.id === actualAccount
+              ) {
+                return (
+                  <div className=" d-flex " key={organization.id}>
+                    <div className=" flex-fill d-flex flex-column ">
+                      {organization.conversations
+                        .slice()
+                        .map((conversation) => {
+                          if (
+                            undefined !==
+                            findActiveConversation(
+                              conversations,
+                              conversation.id
+                            )
+                          ) {
+                            return (
+                              <div
+                                key={conversation.id}
+                                className="p-2 d-flex flex-column mb-2 shadow-sm"
+                              >
+                                <div className="p-2  d-flex flex-column">
+                                  <div className="d-flex">
+                                    <span>
+                                      <strong className="text-capitalize blue-font mr-2">
+                                        {
+                                          findActiveConversation(
+                                            conversations,
+                                            conversation.id
+                                          ).account.name
+                                        }
+                                      </strong>
+                                      posted a question in 
+                                      <Link
+                                        className="font-weight-bold text-dark "
+                                        to={`/show/${
+                                          findActiveConversation(
+                                            conversations,
+                                            conversation.id
+                                          ).organization.slug
+                                        }/${
+                                          findActiveConversation(
+                                            conversations,
+                                            conversation.id
+                                          ).organization.id
+                                        }`}
+                                      >
+                                        <strong className="text-capitalize blue-font ml-2">
+                                          {
+                                            findActiveConversation(
+                                              conversations,
+                                              conversation.id
+                                            ).organization.name
+                                          }
+                                        </strong>
+                                      </Link>
+                                    </span>
+                                  </div>
+                                  <small className="text-muted">
+                                    {moment(
+                                      new Date(
+                                        findActiveConversation(
+                                          conversations,
+                                          conversation.id
+                                        ).created_at
+                                      )
+                                    ).fromNow()}
+                                  </small>
+                                </div>
+
+                                <div className="flex-fill d-flex flex-column bg-white rounded shadow-sm p-2">
+                                  <Link
+                                    className="blue-font"
+                                    to={`/discussion/${
+                                      findActiveConversation(
+                                        conversations,
+                                        conversation.id
+                                      ).title
+                                    }/${
+                                      findActiveConversation(
+                                        conversations,
+                                        conversation.id
+                                      ).id
+                                    }`}
+                                  >
+                                    <h4 className="text-capitalize">
+                                      {
+                                        findActiveConversation(
+                                          conversations,
+                                          conversation.id
+                                        ).title
+                                      }
+                                    </h4>
+                                  </Link>
+
+                                  <p className="line-clamp">
+                                    {
+                                      findActiveConversation(
+                                        conversations,
+                                        conversation.id
+                                      ).description
+                                    }
+                                  </p>
+                                </div>
+
+                                <div className="p-2 flex-fill d-flex justify-content-end colour-blue text-white">
+                                  <div className="d-flex mr-3">
+                                    <div>
+                                      <i className="fas fa-share-square px-2"></i>
+                                      <small className="pr-2">Share</small>
+                                    </div>
+                                    <div className=" mr-3">
+                                      <i className="fas fa-heart px-2"></i>
+                                      <small className="pr-2">5</small>
+                                    </div>
+                                    <div>
+                                      <i className="fas fa-comments pr-2"></i>
+                                      <small className="pr-2">
+                                        {
+                                          findActiveConversation(
+                                            conversations,
+                                            conversation.id
+                                          ).messages.length
+                                        }
+                                      </small>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          }
+                        })}
+                    </div>
+                  </div>
+                );
+              }
+            })}
+          </div>
+
+          <div className="col-md-4 col-sm-12  ">
+            <div className="d-flex flex-column">
+              <div>
+                <div className="d-flex justify-content-between font-weight-bold">
+                  <span>Upcoming events</span>
+                  <span>more...</span>
+                </div>
+                {all.slice().map((organization) => {
+                  if (
+                    organization.followers.slice().filter(function (follower) {
+                      return follower.id === actualAccount;
+                    }).length > 0 ||
+                    organization.account.id === actualAccount
+                  ) {
                     return (
-                      <div className=" my-2 " key={conversation.id}>
-                        <div className=" shadow  rounded-top rounded-bottom-0 p-2">
-                          <img
-                            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
-                            alt="alt images"
-                            className="rounded-circle mr-2 image-account"
-                          />
-                          {conversation.account_id} posted in
-                          <Link
-                            to={`/show/${
-                              this.props.organization.getOrganizationName(
-                                conversation.organization_id
-                              ).slug
-                            }`}
-                            className="px-2"
-                          >
-                            {
-                              this.props.organization.getOrganizationName(
-                                conversation.organization_id
-                              ).name
-                            }
-                          </Link>
-                          <small className="text-muted">
-                            {moment(
-                              new Date(conversation.created_at)
-                            ).fromNow()}
-                          </small>
-                        </div>
-                        <div className="bg-white shadow p-2 d-flex">
-                          <div className="mr-2">
-                            <img
-                              src="https://images.unsplash.com/photo-1504898770365-14faca6a7320?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
-                              alt="alt images"
-                              className="image-cover"
-                            />
-                          </div>
-                          <div className="flex-fill d-flex flex-column mx-2">
-                            <div className="title pb-3">Title</div>
-                            <p className="description  pb-3">
-                              {conversation.title}
-                            </p>
-                            <div className=" comments d-flex justify-content-between my-3">
-                              <div className="d-flex">
-                                <div className="  border rounded">
-                                  <i className="fas fa-heart px-2"></i>
-                                  <span className="pr-2">5</span>
-                                </div>
-                                <div className="mx-2  border rounded">
-                                  <i className="fas fa-share-square px-2"></i>
-                                  <span className="pr-2">5</span>
-                                </div>
-                                <div className="  border rounded">
-                                  <i className="fas fa-bookmark px-2"></i>
-                                  <span className="pr-2">Bookmark post</span>
-                                </div>
-                              </div>
-                              <div className="d-flex">
-                                <span className="text-muted ">
-                                  <i className="fas fa-eye pr-2"></i>
-                                  <span className="pr-2">5</span>
-                                </span>
-                                <Link
-                                  className="text-muted mx-2"
-                                  onClick={() =>
-                                    this.handleClick(conversation.id)
-                                  }
-                                  to={`/discussion/${conversation.title}/${conversation.id}`}
-                                >
-                                  <i className="fas fa-comment-alt pr-2"></i>
-                                  <span className="pr-2">5</span>
-                                </Link>
-                              </div>
-                            </div>
-                            
-                          </div>
+                      <div className=" d-flex " key={organization.id}>
+                        <div className=" flex-fill d-flex flex-column ">
+                          {organization.events
+                            .slice()
+                            .filter((event) => {
+                              return moment(new Date(event.startTime))
+                                .utc()
+                                .isSameOrAfter(new Date());
+                            })
+                            .map((event) => {
+                              if (undefined !== findEvent(events, event.id)) {
+                                return (
+                                  <div
+                                    key={event.id}
+                                    className="p-2 d-flex flex-column mb-2 shadow-sm"
+                                  >
+
+                                    <div className="flex-fill d-flex justify-content-between bg-white rounded p-2">
+                                      <Link
+                                        className="blue-font"
+                                        to={`/discussion/${
+                                          findEvent(events, event.id).title
+                                        }/${findEvent(events, event.id).id}`}
+                                      >
+                                        <h4 className="text-capitalize">
+                                          {findEvent(events, event.id).title}
+                                        </h4>
+                                      </Link>
+                                      <small className="text-muted">
+                                        {moment(
+                                          new Date(
+                                            findEvent(
+                                              events,
+                                              event.id
+                                            ).startTime
+                                          )
+                                        ).format("MMM Do YY")}
+                                      </small>
+                                    </div>
+
+                                    <div className="p-2 flex-fill d-flex justify-content-between colour-red text-white">
+                                      <div className="d-flex">
+                                        <div>
+                                          <small>
+                                            {findEvent(events, event.id).spots}
+                                          </small>{" "}
+                                          Spots
+                                        </div>
+                                      </div>
+                                      <span>Attend</span>
+                                    </div>
+                                  </div>
+                                );
+                              }
+                            })}
                         </div>
                       </div>
                     );
-                  })
-              )}
-            </div>
-            <div className="col-md-4">
-              <div className="d-flex flex-column">
-                <Ads />
-                <List data={eventContent}/>
+                  }
+                })}
+              </div>
+              <div>
+                <div className="d-flex justify-content-between mt-3 font-weight-bold">
+                  <span>NearBy events</span>
+                  <span>more...</span>
+                </div>
+                <div className="p-2 d-flex bg-white flex-column mb-2 shadow-sm my-3">
+                  <div className="d-flex justify-content-center">
+                    <h5>There is no events near you</h5>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -224,3 +308,12 @@ class Network extends React.Component {
 }
 export default Network;
 
+const findActiveConversation = (conversations, activeConversation) => {
+  return conversations.find(
+    (conversation) => conversation.id === activeConversation
+  );
+};
+
+const findEvent = (events, event) => {
+  return events.find((e) => e.id === event);
+};

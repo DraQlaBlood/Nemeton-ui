@@ -1,28 +1,49 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  NavDropdown,
-  Modal,
-  Form,
-  Row,
-  Col
-} from "react-bootstrap";
+import { NavDropdown, Modal, Form, Row, Col } from "react-bootstrap";
 import { inject, observer } from "mobx-react";
 
 import Sidebar from "react-sidebar";
 import SidebarContent from "./sidemenu/sidebar_content";
 import AddAccount from "../dashboard/accounts/new";
+import { ActionCableConsumer } from "react-actioncable-provider";
+import Cable from "../chatrooms/Cables";
 
-@inject("user", "account", "views")
+@inject("user", "account", "views", "messaging")
 @observer
 class Member extends React.Component {
-  signOut = e => {
+
+  componentDidMount=async()=>{
+    await this.props.account.fetchAll();
+    await this.props.account.find();
+  }
+  
+  signOut = (e) => {
     e.preventDefault();
     const { user } = this.props;
     user.destroySession();
   };
 
-  handleChange = e => {
+  handleReceivedConversation = (response) => {
+    const { conversation } = response;
+    const { account } = this.props.account;
+    if (account.id !== conversation.account.id) {
+      this.props.messaging.setNotification(true);
+    }
+  };
+
+  handleReceivedMessage = (response) => {
+    const { message } = response;
+    const { account} = this.props.account;
+
+    console.log(message.account.id, account.id)
+
+    if (account.id !== message.account.id) {
+      this.props.messaging.setNotification(true);
+    }
+  };
+
+  handleChange = (e) => {
     e.preventDefault();
     let account_id = this.refs.account_id.value;
     this.props.account.hasAccount(account_id);
@@ -37,16 +58,26 @@ class Member extends React.Component {
 
   render() {
     const { user } = this.props;
-    const { showModal } = this.props.account;
-
+    const { showModal, account } = this.props.account;
+    const { conversations } = this.props.messaging;
     const sidebar = <SidebarContent />;
     const sidebarProps = {
       sidebar,
       open: this.props.views.isSidebarOpen,
-      pullRight: true
+      pullRight: true,
     };
     return (
       <div className="d-flex flex-column bg-white ">
+        <ActionCableConsumer
+          channel={{ channel: "ConversationsChannel" }}
+          onReceived={this.handleReceivedConversation}
+        />
+        {conversations.length ? (
+          <Cable
+            conversations={this.props.messaging.conversations}
+            handleReceivedMessage={this.handleReceivedMessage}
+          />
+        ) : null}
         <div className="d-none d-block d-sm-block d-md-block d-lg-none">
           <Sidebar {...sidebarProps} />
         </div>
@@ -71,7 +102,7 @@ class Member extends React.Component {
               <Row>
                 <Col>
                   <Form.Control
-                    placeholder="Search events, organizations or categories"
+                    placeholder="Search events, organizations"
                     className="bg-light text-dark"
                   />
                 </Col>
@@ -93,10 +124,13 @@ class Member extends React.Component {
                   </Link>
                 </div>
 
-                <div className="px-3 nav-link">
-                  <Link className=" liens " to="/my-notifications">
+                <div className="notification px-3 nav-link">
+                  <Link className=" liens " to="/notifications">
                     <i className="fas fa-bell fa-x"></i>
                   </Link>
+                  {this.props.messaging.notification ? (
+                    <div class="topright rounded-circle bg-danger"></div>
+                  ) : null}
                 </div>
                 <div className="px-3 nav-link">
                   <Link className=" liens " to="/users/chatrooms">
@@ -145,7 +179,7 @@ class Member extends React.Component {
                       </div>
                       <div>
                         <Link to="/settings" className="dropdown-item">
-                          <i className=" pr-2 fas fa-newspaper"></i> Posts
+                          <i className=" pr-2 fas fa-newspaper"></i> My events
                         </Link>
                       </div>
                       <div>
@@ -154,15 +188,11 @@ class Member extends React.Component {
                           onClick={this.handleShow}
                           className="dropdown-item"
                         >
-                          <i className=" pr-2 fas fa-user-plus"></i> Add Account
+                          <i className=" pr-2 fas fa-user-plus"></i> Add new
+                          Account
                         </Link>
                       </div>
-                      <div>
-                        <Link to="/organizations" className="dropdown-item">
-                          <i className=" pr-2 fas fa-id-badge"></i> Add
-                          Organization
-                        </Link>
-                      </div>
+
                       <NavDropdown.Divider />
                       <div>
                         <Link to="/settings" className="dropdown-item">
@@ -177,12 +207,6 @@ class Member extends React.Component {
                         </Link>
                       </div>
                       <NavDropdown.Divider />
-                      <div>
-                        <Link to="/settings" className="dropdown-item">
-                          <i className=" pr-2 fas fa-toggle-on"></i> Switch
-                          account
-                        </Link>
-                      </div>
 
                       <div>
                         <Link

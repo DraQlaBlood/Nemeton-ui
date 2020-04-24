@@ -1,10 +1,14 @@
 .organization-banner{
+  height: 30vh;
     background-color: #3C3B6E;
 }
-.imageSize{
-  width: 25px;
-  height: 25px;
+.discussion-banner{
+  background-color: #3C3B6E;
 }
+.showBody{
+  min-height: 50vh;
+}
+
 .suggested-groups{
   overflow-x: scroll;
   overflow-y: hidden;
@@ -21,8 +25,20 @@
 .showLinks{
     color: #B22234;
 }
-.showBody{
-    min-height: 80vh;
+.descripto{
+  background: transparent !important;
+  z-index: 1;
+  margin-top: -20vh;
+  min-height: 50vh;
+}
+.orgDisplay{
+  height: 30vh;
+  width: 100%;
+  background-image: url("https://images.unsplash.com/photo-1586348943529-beaae6c28db9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=716&q=80");
+}
+.orgDisplay:hover div{
+  opacity: .6;
+  color: #000;
 }
 
 /*        User details  **/

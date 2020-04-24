@@ -4,8 +4,7 @@
 .eventDesc{
     display: -webkit-box;
    -webkit-box-orient: vertical;
-   line-height: 2;
-   -webkit-line-clamp: 3;
+   -webkit-line-clamp: 1;
    overflow: hidden;
 }
 .eventdiv:hover{

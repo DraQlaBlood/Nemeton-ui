@@ -18,7 +18,8 @@
     background: #3C3B6E;
 }
 .instantChat{
-    height: 60vh
+    height: 75vh;
+    width: 100%;
 }
 .bg-blue{
     background:  #3C3B6E;

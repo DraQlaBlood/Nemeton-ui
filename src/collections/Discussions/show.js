@@ -11,22 +11,14 @@ var moment = require("moment");
 @observer
 class Discussion extends React.Component {
   componentDidMount = async () => {
+    await this.props.messaging.fetchConversations();
     const { id } = this.props.match.params;
     await this.props.user.signIn();
     await this.props.messaging.findOne(id);
   };
 
-  handleReceivedConversation = (response) => {
-    const { conversation } = response;
-    console.log("Got a new conversation");
-    this.props.messaging.setConversations([
-      ...this.props.messaging.conversations,
-      conversation,
-    ]);
-    console.log(this.props.messaging.conversations.length);
-  };
-
   handleReceivedMessage = (response) => {
+    const { id } = this.props.match.params;
     const { message } = response;
     console.log("Got a new message");
     const conversations = [...this.props.messaging.conversations];
@@ -34,14 +26,12 @@ class Discussion extends React.Component {
     const conversation = conversations.find(
       (conversation) => conversation.id === message.conversation_id
     );
-    //const messages = [...conversation.messages];
     conversation.messages = [...conversation.messages, message];
-    this.props.messaging.setConversations(conversations);
+    this.props.messaging.setConversations(conversations, conversation.messages);
   };
 
   render() {
     const { conversation, activeConversationMessages } = this.props.messaging;
-
     return (
       <div className="flex-grow-1 px-3 mb-5 pb-4">
         <ActionCableConsumer
@@ -60,37 +50,36 @@ class Discussion extends React.Component {
           />
         </div>
         <div className="row">
-          <div className="col-md-8 pl-5">
-            <div classNam="d-flex flex-column px-2 bg-light my-2">
+          <div className="col-md-8 ">
+            <div className="d-flex flex-column px-2 bg-light my-2">
               <div className="d-flex flex-column">
-                <h3 className="my-2">Title</h3>
+                <h4 className="my-2">{conversation.title}</h4>
                 <small className="text-muted">
-                  {" "}
-                  published:{" "}
-                  {moment(new Date(conversation.created_at)).fromNow()}
+                  published:  
+                  {moment(new Date(conversation.created_at)).fromNow()} 
                 </small>
               </div>
               <div className="border-bottom flex-fill mb-2"></div>
               <div className="d-flex ">
-                <p>{conversation.title}</p>
+                <p>{conversation.description}</p>
               </div>
             </div>
 
-            <div className="px-2 bg-light my-2 border">
+            <div className="px-2 bg-light my-2 border rounded">
               <NewMessageForm conversation_id={conversation.id} />
             </div>
 
             <div className="comments d-flex justify-content-between mb-2">
               <div className="d-flex">
-                <div className="  border rounded ">
+                <div>
                   <i className="fas fa-heart px-2"></i>
                   <span className="pr-2">Like</span>
                 </div>
-                <div className="mx-2  border rounded">
+                <div className="mx-2">
                   <i className="fas fa-share-square px-2"></i>
                   <span className="pr-2">Share</span>
                 </div>
-                <div className="mx-2  border rounded">
+                <div className="mx-2">
                   <i className="fas fa-bookmark px-2"></i>
                   <span className="pr-2">Bookmark this post</span>
                 </div>
@@ -106,12 +95,17 @@ class Discussion extends React.Component {
                 </span>
                 <span className="text-muted ">
                   <i className="fas fa-comment-alt pr-2"></i>
-                  <span className="pr-2">5</span>
+                  <span className="pr-2">
+                    {undefined !== activeConversationMessages && 
+                    activeConversationMessages.length > 0
+                      ? activeConversationMessages.length
+                      : 0}
+                  </span>
                 </span>
               </div>
             </div>
             <div className="border mb-2"></div>
-            <div>{orderedMessages(activeConversationMessages)}</div>
+            <div>{undefined !== activeConversationMessages && orderedMessages(activeConversationMessages)}</div>
           </div>
           <div className="col-md-4 py-3">
             <Ads />

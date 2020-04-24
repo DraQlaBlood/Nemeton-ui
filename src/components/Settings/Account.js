@@ -30,7 +30,7 @@ class AccountSetting extends React.Component {
     const { user } = this.props;
 
     return (
-      <div className="flex-grow-1 d-flex flex-column bg-light">
+      <div className="flex-grow-1 d-flex flex-column bg-light mb-5">
         <div className="top colour-blue d-flex">
           <div className="mx-5 px-5 d-flex flex-fill align-items-center">
             <div className="p-2">
@@ -42,16 +42,16 @@ class AccountSetting extends React.Component {
                 <span className="mr-5"></span>
               </div>
             </div>
-            <div className="ml-auto p-2 col-md-4">
+            <div className="ml-auto p-2 col-md-4 ">
               <AccountSettings accounts={all} />
             </div>
           </div>
         </div>
         <div className="bottom flex-grow-1 px-5 py-3">
           <div className="row">
-            <div className="col-3">
+            <div className="col-md-3 col-sm-12" >
               <div
-                className="nav flex-column nav-pills"
+                className="nav flex-column nav-pills sticky-top"
                 id="v-pills-tab"
                 role="tablist"
                 aria-orientation="vertical"
@@ -103,10 +103,10 @@ class AccountSetting extends React.Component {
                 </a>
               </div>
             </div>
-            <div className="col-9">
+            <div className="col-md-9 col-sm-12">
               <div className="tab-content" id="v-pills-tabContent">
                 <div
-                  className="tab-pane fade show active p-3"
+                  className="tab-pane fade show active p-2"
                   id="v-pills-general"
                   role="tabpanel"
                   aria-labelledby="v-pills-general-tab"
@@ -114,7 +114,7 @@ class AccountSetting extends React.Component {
                  <General/>
                 </div>
                 <div
-                  className="tab-pane fade p-3"
+                  className="tab-pane fade p-2"
                   id="v-pills-security"
                   role="tabpanel"
                   aria-labelledby="v-pills-security-tab"
@@ -123,7 +123,7 @@ class AccountSetting extends React.Component {
                 </div>
                 
                 <div
-                  className="tab-pane fade p-3"
+                  className="tab-pane fade p-2"
                   id="v-pills-notifications"
                   role="tabpanel"
                   aria-labelledby="v-pills-notifications-tab"
@@ -131,7 +131,7 @@ class AccountSetting extends React.Component {
                   <Notification/>
                 </div>
                 <div
-                  className="tab-pane fade p-3"
+                  className="tab-pane fade p-2"
                   id="v-pills-deactivate"
                   role="tabpanel"
                   aria-labelledby="v-pills-deactivate-tab"

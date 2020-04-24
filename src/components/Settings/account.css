@@ -1,11 +1,14 @@
 .top{
-    height: 20vh;
+    height: 15vh;
 }
 .colour-blue{
     background: #3C3b6e;
     color: #fff;
   }
-
+.picture{
+    width: 150px;
+    height: 150px;
+}
   .btn-settings{
       background: transparent !important;
       border-radius: 0% !important;

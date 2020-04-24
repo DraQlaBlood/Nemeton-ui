@@ -1,7 +1,7 @@
 import { observable, action } from "mobx";
 
 class Views {
-  @observable isMap = true;
+  @observable selectedMapObject = null;
   @observable isSidebarOpen= false;
 
 
@@ -9,9 +9,8 @@ class Views {
     this.isSidebarOpen = status;
   }
 
-  @action setIsMap() {
-    console.log("map");
-    this.isMap = true;
+  @action setSelectMapObject(objectSelected) {
+    this.selectedMapObject = objectSelected;
   }
   @action setIsList() {
     console.log("list");

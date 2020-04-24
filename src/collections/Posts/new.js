@@ -55,7 +55,7 @@ class Post extends React.Component {
                 <Col>
                   <Form.Control
                     as="textarea"
-                    rows="15"
+                    rows="10"
                     ref="description"
                     placeholder="description"
                   />

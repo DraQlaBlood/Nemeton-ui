@@ -13,11 +13,11 @@ import Dashboard from "./components/dashboard/dashboard";
 
 import Messaging from "./components/chatrooms/index";
 import Settings from "./components/dashboard/accounts/settings";
-import Notifications from "./components/dashboard/notifications";
 import OrgCollections from "./collections/Organizations/index";
 import Network from "./components/Network";
 import Discussion from "./collections/Discussions/show";
 import AccountSetting from "./components/Settings/Account";
+import Notification from "./components/Notifications";
 
 
 
@@ -40,9 +40,9 @@ const Routes = () => (
 
 
     <Route path='/network' component={Network}/>
-    <Route path="/my-notifications" component={Notifications} />
+    <Route path='/notifications' component={Notification}/>
 
-    <Route path="/show/:organization_slug" component={OrgModel}/>
+    <Route path="/show/:organization_slug/:id" component={OrgModel}/>
     <Route path="/organizations" component={OrgCollections}/>
 
     <Route path="/discussion/:title/:id" component={Discussion}/>

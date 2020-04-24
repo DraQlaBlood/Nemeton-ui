@@ -12,7 +12,10 @@ function App() {
       <ReactNotifications />
       <Navigation />
       <Routes className="Component"/>
+      <div className="d-none d-sm-none d-md-none d-lg-block">
       <MessageAccordion/>
+      </div>
+      
       <Footer />
     </div>
   );

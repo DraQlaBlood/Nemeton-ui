@@ -15,10 +15,12 @@ class Dashboard extends React.Component {
 
   render() {
     const { all } = this.props.account;
-    const {user}  = this.props
 
-    if (user.account_id===null && all.length === 0) return <AddAccount />;
-    else return <Layout />;
+    if (all.length <= 0) {
+      return <AddAccount />;
+    } else {
+      return <Layout />;
+    }
   }
 }
 export default Dashboard;

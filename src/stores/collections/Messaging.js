@@ -17,16 +17,25 @@ class Messaging {
   @observable text = '';
   @observable convesation_id = null;
 
+  @observable notification = localStorage.getItem("notification");
+
+
   @observable messages = [];
 
-  @action setConversations(conversations) {
+  @action setConversations(conversations, messages) {
     this.conversations = conversations;
+
+    this.activeConversationMessages = messages
   }
 
   @action setChatOption(isChatOpen) {
     this.isChatOpen = isChatOpen;
   }
 
+  @action setNotification(notification){
+    this.notification = notification;
+    localStorage.setItem("notification", this.notification);
+  }
 
   @action setIsLoading(isloading){
     this.isloading = isloading;
@@ -57,12 +66,13 @@ class Messaging {
     this.setIsLoading(false);
   }
 
-  @action async addConversation(title, organization_id) {
+  @action async addConversation(title, description,organization_id) {
     this.account_id = localStorage.getItem("account_id");
     console.log(title, organization_id);
 
     await Api.post(`/` + this.account_id +`/organizations/`+organization_id +this.path, {
       title,
+      description,
       organization_id
     });
   }

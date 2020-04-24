@@ -5,3 +5,6 @@
     background-color: #B22234;
     border-color: #B22234;
 }
+.map{
+    min-height: 90vh;
+}

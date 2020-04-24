@@ -5,7 +5,6 @@ import history from "../../history";
 class User {
   sessions = "/sessions";
   users = "/users";
-  coordinates = "/coordinates";
 
   @observable isSingningIn = false;
   @observable isLoading = false;
@@ -15,7 +14,6 @@ class User {
   
   @observable currentlatitude = null;
   @observable currentlongitude = null;
-  @observable coords = null;
   
 
   @action setIsLoading(status) {
@@ -63,9 +61,6 @@ class User {
       this.account_id = account_id;
       this.signedIn = true;
       this.isLoading = false;
-
-      //console.log(this.account_id)
-
       history.push(`/welcome/accounts/${this.account_id}`);
     } else {
       this.signOut();
@@ -73,7 +68,8 @@ class User {
   }
   //end for landing
 
-  signIn(email = null, password = null) {
+  @action async signIn(email = null, password = null) {
+    this.setIsLoading(true)
     const store = {
       authentication_token: localStorage.getItem("token"),
       email: localStorage.getItem("email"),
@@ -85,6 +81,7 @@ class User {
         store.email,
         store.account_id
       );
+      this.setIsLoading(false)
     } else if (email && password) {
       this.createSession(email, password);
       this.setIsSingningIn(true);
@@ -97,7 +94,6 @@ class User {
     email,
     account_id
   ) {
-    this.setIsLoading(true);
     const response = await Api.get(this.sessions);
     const status = await response.status;
 
@@ -105,7 +101,8 @@ class User {
       this.email = email;
       this.account_id = account_id;
       this.signedIn = true;
-      this.isLoading = false;
+
+      this.setIsLoading(false)
     } else {
       this.signOut();
     }
@@ -135,7 +132,6 @@ class User {
 
 
   async createSession(email, password) {
-    //console.log("logging in");
     this.setIsLoading(true);
     const response = await Api.post(this.sessions, { email, password });
 
@@ -144,8 +140,6 @@ class User {
     if (status === 201) {
       const body = await response.json();
       const { user } = body.data;
-
-      //console.log("accounts", user.accounts.length);
       localStorage.setItem("token", user.authentication_token);
       localStorage.setItem("email", user.email);
 
@@ -156,10 +150,8 @@ class User {
           user.email,
           user.accounts[0].slug
         );
-
-        this.setIsLoading(false);
-
         history.push(`/welcome`);
+        this.setIsLoading(false);
       } else {
         this.setSignedIn(
           true,
@@ -167,7 +159,6 @@ class User {
           localStorage.getItem("null")
         );
         this.setIsLoading(false);
-        history.push(`/welcome`);
       }
     } else {
       console.log("error");
@@ -195,51 +186,6 @@ class User {
     this.signedIn = false;
     this.isLoading = false;
     history.push("/users/new-user-session");
-  }
-
-  /*Getting user coordinates*/
-  @action async getCoords() {
-    this.setIsLoading(true);
-    const resp = await Api.get(this.coordinates);
-    const stat = await resp.status;
-
-    const response = await fetch("http://localhost:4001/location");
-    const status = await response.status;
-
-    if (stat === 200 && status === 200) {
-      const body = await resp.json();
-      let currentlocation = body.data.slice(-1).pop();
-      const bodycurrent = await response.json();
-
-      if (
-        currentlocation == null ||
-        (currentlocation.latitude !== bodycurrent.latitude &&
-          currentlocation.longitude !== bodycurrent.longitude)
-      ) {
-        this.currentlatitude = bodycurrent.latitude;
-        this.currentlongitude = bodycurrent.longitude;
-
-        await Api.post(this.coordinates, bodycurrent);
-
-        let city = bodycurrent.city;
-        let country = bodycurrent.country;
-        this.coords = { city, country };
-
-        this.setIsSingningIn(false);
-        this.setIsLoading(false);
-      } else {
-        this.currentlatitude = bodycurrent.latitude;
-        this.currentlongitude = bodycurrent.longitude;
-
-        let city = bodycurrent.city;
-        let country = bodycurrent.country;
-        this.coords = { city, country };
-
-        this.setIsSingningIn(false);
-        this.setIsLoading(false);
-      }
-    }
-    
   }
 }
 export default new User();

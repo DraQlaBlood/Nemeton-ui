@@ -1,6 +1,7 @@
 import React from "react";
 import { observer, inject } from "mobx-react";
 import { ActionCableConsumer } from "react-actioncable-provider";
+import NoContent from "../../components/LockContents/noContent";
 
 var moment = require("moment");
 
@@ -11,7 +12,7 @@ class AllEvents extends React.Component {
     await this.props.event.fetchAllEvents();
   };
 
-  handleReceivedEvent = response => {
+  handleReceivedEvent = (response) => {
     const { event } = response;
     this.props.event.setEvents([...this.props.event.events, event]);
     console.log(this.props.event.events.length);
@@ -19,33 +20,32 @@ class AllEvents extends React.Component {
 
   render() {
     return (
-      <div >
+      <div>
         <ActionCableConsumer
           channel={{ channel: "EventsChannel" }}
           onReceived={this.handleReceivedEvent}
         />
 
+        {mapEvents(this.props.event.events, this.props.org_id).length>0 ?
         <div className="row">
-          <div className="col-md-8">
+          <div className="col-md-12">
             <div className="d-flex flex-column">
-              <div className="mt-3">{mapEvents(this.props.event.events, this.props.org_id)}</div>
+              <div className="mt-3">
+                {mapEvents(this.props.event.events, this.props.org_id)}
+              </div>
             </div>
           </div>
-          <div className="col-md-4 ">
-            <div className="d-flex flex-column">
-              <div className="mt-3">test</div>
-            </div>
-          </div>
-        </div>
+        </div>: <NoContent/>}
       </div>
     );
   }
 }
+export default AllEvents;
 
-const mapEvents = (events,organization_id) => {
+const mapEvents = (events, organization_id) => {
   return events
     .slice()
-    .sort(function(a, b) {
+    .sort(function (a, b) {
       if (new Date(a.created_at) > new Date(b.created_at)) {
         return -1;
       } else if (new Date(a.created_at) < new Date(b.created_at)) {
@@ -54,34 +54,34 @@ const mapEvents = (events,organization_id) => {
         return 0;
       }
     })
-    .filter(event => {
-      return event.organization_id === organization_id;})
-    .map(event => {
+    .filter((event) => {
+      return event.organization_id === organization_id;
+    })
+    .map((event) => {
       return (
-       <div
+        <div
           className=" eventdiv p-2 border bg-light rounded d-flex flex-column mb-2"
           key={event.id}
         >
-           <div
-            className="p-2 text-capitalize font-weight-bold eventDate text-truncate"
-            style={{ maxWidth: "300px" }}
+          <div
+            className="p-2 text-capitalize font-weight-bold eventDate"
           >
-            {moment(new Date(event.startTime)).format(
-              "MMMM Do YYYY"
-            )}
+            <span>
+              {moment(new Date(event.startTime)).format("MMMM Do YYYY")}
+            </span>
           </div>
-          <h4
-            className="px-2 text-capitalize font-weight-bold text-truncate"
-            style={{ maxWidth: "300px" }}
+          <h5
+            className="px-2 text-capitalize font-weight-bold"
           >
             {event.title}
-          </h4>
-          <span className="px-2 mb-3">
-            <i className="fas fa-map-marker-alt"></i> {event.address}
-          </span>
+          </h5>
+
           <span className="p-2 eventDesc">{event.description}</span>
           <div className="d-flex justify-content-between">
             <div className="d-flex justify-content-start p-2">
+              <span className="px-2">
+                <i className="fas fa-map-marker-alt"></i> {event.address}
+              </span>
               <span className="px-2">
                 <img
                   src="https://via.placeholder.com/20"
@@ -108,4 +108,4 @@ const mapEvents = (events,organization_id) => {
       );
     });
 };
-export default AllEvents;
+

@@ -8,7 +8,7 @@ import { Form, Col } from "react-bootstrap";
 class AccountSettings extends React.Component {
   switchAccount = e => {
     e.preventDefault();
-    if (this.refs.account_id.value !== this.props.account.account_id) {
+    if (this.refs.account_id.value !== this.props.account.account.id) {
       let account_id = this.refs.account_id.value;
       this.props.account.hasAccount(account_id);
     }
@@ -38,7 +38,6 @@ class AccountSettings extends React.Component {
                     ref="account_id"
                     onChange={this.switchAccount}
                   >
-                    <option>Switch account to</option>
                     {options}
                   </Form.Control>
                 </Form.Group>

@@ -15,7 +15,7 @@ class MessageAccordion extends React.Component {
       <div className="d-flex flex-column fixed-bottom d-none d-sm-none d-md-block mr-5">
         <div className="d-flex justify-content-end ">
           {this.props.messaging.isChatOpen && (
-            <div className="col-md-3 mb-4 instantChat">
+            <div className="col-md-4 mb-4 instantChat">
               <div className=" bg-blue topChat rounded-top border border-bottom-0 text-white d-flex justify-content-center">
                 <div className="align-items-center d-flex flex-column p-3">
 

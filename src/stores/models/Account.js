@@ -2,20 +2,18 @@ import { observable, action } from "mobx";
 import Api from "../../lib/helpers/api/index";
 import user from "./User";
 
+
 class Account {
   path = "/accounts";
 
   @observable all = [];
   @observable isLoading = false;
   @observable account_id = [];
-  @observable account=[]
-  @observable accountOrganizations = [];
-  @observable followedOrganizations=[];
-  @observable likedOrganizations=[];
+  @observable account={}
 
 
   @observable bioUpdate = false;
-
+  @observable emailLink= false;
   @observable showModal= false;
 
   @action setIsLoading(status) {
@@ -29,6 +27,11 @@ class Account {
   @action async setbioUpdate(bioUpdate){
     this.bioUpdate = bioUpdate;
   }
+
+  @action async setEmailLink(emailLink){
+    this.emailLink = emailLink;
+  }
+
 
   @action async fetchAll() {
     this.setIsLoading(true);
@@ -59,19 +62,13 @@ class Account {
     this.setIsLoading(true)
     let account= this.all.filter(function(account) {
       return account.slug === user.account_id;
-    })[0];
-
-    console.log("Debugging account id : ",account.id)
-    const response = await Api.get(this.path+`/`+account.id);
+    });
+    const response = await Api.get(this.path+`/`+account[0].id);
     const status = await response.status;
     if (status === 200) {
       const json = await response.json();
-      this.account = await json.data
-      this.followedOrganizations = account.following;
-      this.accountOrganizations = account.organizations;
-      this.likedOrganizations = account.liking;
+      this.account = await json.data.account
     }
-    //this.account_name = account.name
     this.account_id  = account.id
     this.setIsLoading(false)
   }
@@ -87,17 +84,20 @@ class Account {
   hasAccount(account) {
     localStorage.removeItem("account_id");
     localStorage.setItem("account_id", account);
-    if (this.all.length === 1) {
+
+
+    if (this.all.length >= 1) {
       user.signInFromStorage(
         localStorage.getItem("email"),
-        localStorage.getItem("firstName"),
-        localStorage.getItem("lastName"),
-        localStorage.getItem("user_id"),
         localStorage.getItem("account_id")
       );
     } else {
       user.signIn(null, null);
     }
   }
+
+
+
+
 }
 export default new Account();

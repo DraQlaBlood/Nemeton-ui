@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 const Ads = ({ data }) => {
   return (
-    <div className="my-2 p-3 bg-blue">
-      <div className="d-flex flex-column">
+    <div className="my-2 p-3 bg-blue ">
+      <div className=" d-flex flex-column">
         <div className="d-flex align-items-center">
           <i className="fas fa-grin-alt fa-8x pr-2 text-white"></i>
           <div className=" flex-fill d-flex flex-column">

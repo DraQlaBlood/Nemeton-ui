@@ -1,7 +1,7 @@
 body,
 html {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 12px;
+  font-family:'Baloo Tammudu 2', cursive;
+  font-size: 14px;
   background: #fff;
   overflow-x: hidden;
 }
@@ -10,11 +10,25 @@ html {
   background: #fff;
   height: 100vh;
 }
+.notification{
+  position: relative;
+}
+.topright {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  top: 2px;
+  right: 10px;
+}
 
+.banner{
+  max-height: 30vh;
+}
 .accountcss {
   height: 50vh;
   width: 50vw;
 }
+
 .accountNav {
   border-top: none;
 }
