@@ -14,9 +14,9 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { all } = this.props.account;
+    const { all, isLoading} = this.props.account;
 
-    if (all.length <= 0) {
+    if (all.length <= 0 && !isLoading) {
       return <AddAccount />;
     } else {
       return <Layout />;

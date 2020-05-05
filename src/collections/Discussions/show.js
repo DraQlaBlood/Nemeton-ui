@@ -93,7 +93,7 @@ class Discussion extends React.Component {
                   <span className="pr-2">5</span>
                 </span>
                 <span className="text-muted ">
-                  <i className="fas fa-comment-alt pr-2"></i>
+                  <i className="fas fa-comments pr-2"></i>
                   <span className="pr-2">
                     {undefined !== activeConversationMessages && 
                     activeConversationMessages.length > 0

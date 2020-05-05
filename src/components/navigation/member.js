@@ -12,12 +12,11 @@ import Cable from "../chatrooms/Cables";
 @inject("user", "account", "views", "messaging")
 @observer
 class Member extends React.Component {
-
-  componentDidMount=async()=>{
+  componentDidMount = async () => {
     await this.props.account.fetchAll();
     await this.props.account.find();
-  }
-  
+  };
+
   signOut = (e) => {
     e.preventDefault();
     const { user } = this.props;
@@ -27,7 +26,7 @@ class Member extends React.Component {
   handleReceivedConversation = (response) => {
     const { conversation } = response;
     const { account } = this.props.account;
-    if (account.id !== conversation.account.id) {
+    if (conversation && account.id !== conversation.account.id) {
       this.props.messaging.setNotification(true);
     }
     localStorage.setItem("notification", this.props.messaging.notification);
@@ -35,15 +34,14 @@ class Member extends React.Component {
 
   handleReceivedMessage = (response) => {
     const { message } = response;
-    const { account} = this.props.account;
+    const { account } = this.props.account;
 
-    console.log(message.account.id, account.id)
+    console.log(message.account.id, account.id);
 
     if (account.id !== message.account.id) {
       this.props.messaging.setNotification(true);
       localStorage.setItem("notification", this.props.messaging.notification);
     }
-
   };
 
   handleChange = (e) => {
@@ -120,7 +118,11 @@ class Member extends React.Component {
                     <i className="fas fa-home fa-x"></i>
                   </Link>
                 </div>
-
+                <div className="px-3 nav-link">
+                  <Link className=" liens " to="/organizations">
+                    <i className="fas fa-sitemap fa-x"></i>
+                  </Link>
+                </div>
                 <div className="px-3 nav-link">
                   <Link className=" liens " to="/network">
                     <i className="fas fa-users fa-x"></i>
@@ -136,7 +138,7 @@ class Member extends React.Component {
                   ) : null}
                 </div>
                 <div className="px-3 nav-link">
-                  <Link className=" liens " to="/users/chatrooms">
+                  <Link className=" liens " to="/messages">
                     <i className="fas fa-comments fa-x"></i>
                   </Link>
                 </div>
@@ -170,11 +172,7 @@ class Member extends React.Component {
                           settings
                         </Link>
                       </div>
-                      <div>
-                        <Link className="dropdown-item" to="/organizations">
-                          <i className=" pr-2 fas fa-sitemap"></i> Organizations
-                        </Link>
-                      </div>
+
                       <div>
                         <Link to="/settings" className="dropdown-item">
                           <i className=" pr-2 fas fa-bookmark"></i> Saved

@@ -18,6 +18,7 @@ import Network from "./components/Network";
 import Discussion from "./collections/Discussions/show";
 import AccountSetting from "./components/Settings/Account";
 import Notification from "./components/Notifications";
+import DirectMessage from "./components/DirectMessaging"
 
 
 
@@ -41,6 +42,7 @@ const Routes = () => (
 
     <Route path='/network' component={Network}/>
     <Route path='/notifications' component={Notification}/>
+    <Route path='/messages' component={DirectMessage}/>
 
     <Route path="/show/:organization_slug/:id" component={OrgModel}/>
     <Route path="/organizations" component={OrgCollections}/>

@@ -26,16 +26,19 @@ class AllEvents extends React.Component {
           onReceived={this.handleReceivedEvent}
         />
 
-        {mapEvents(this.props.event.events, this.props.org_id).length>0 ?
-        <div className="row">
-          <div className="col-md-12">
-            <div className="d-flex flex-column">
-              <div className="mt-3">
-                {mapEvents(this.props.event.events, this.props.org_id)}
+        {mapEvents(this.props.event.events, this.props.org_id).length > 0 ? (
+          <div className="row">
+            <div className="col-md-12">
+              <div className="d-flex flex-column">
+                <div className="mt-3">
+                  {mapEvents(this.props.event.events, this.props.org_id)}
+                </div>
               </div>
             </div>
           </div>
-        </div>: <NoContent/>}
+        ) : (
+          <NoContent />
+        )}
       </div>
     );
   }
@@ -63,20 +66,16 @@ const mapEvents = (events, organization_id) => {
           className=" eventdiv p-2 border bg-light rounded d-flex flex-column mb-2"
           key={event.id}
         >
-          <div
-            className="p-2 text-capitalize font-weight-bold eventDate"
-          >
+          <div className="p-2 text-capitalize font-weight-bold eventDate d-flex justify-content-between">
+            <h5 className="text-capitalize font-weight-bold">
+              {event.title}
+            </h5>
             <span>
               {moment(new Date(event.startTime)).format("MMMM Do YYYY")}
             </span>
           </div>
-          <h5
-            className="px-2 text-capitalize font-weight-bold"
-          >
-            {event.title}
-          </h5>
 
-          <span className="p-2 eventDesc">{event.description}</span>
+          <p className="line-clamp2">{event.description}</p>
           <div className="d-flex justify-content-between">
             <div className="d-flex justify-content-start p-2">
               <span className="px-2">
@@ -108,4 +107,3 @@ const mapEvents = (events, organization_id) => {
       );
     });
 };
-

@@ -18,7 +18,7 @@ class Map extends React.Component {
     } else {
       return (
         <GoogleMap
-          defaultZoom={8}
+          defaultZoom={10}
           defaultCenter={{
             lat: 43.653225, //Number(currentlatitude),
             lng: -79.383186, //Number(currentlongitude)

@@ -128,6 +128,22 @@ class OrgModel extends React.PureComponent {
                       {organization.name}
                     </h3>
                   </span>
+                  {undefined !== organization.status && organization.status ? (
+                    <span>
+                      {organization.status === "close" ? (
+                        <span>
+                          {" "}
+                          <i className="fas fa-lock pr-2"></i>Private
+                          Organization
+                        </span>
+                      ) : (
+                        <span>
+                          <i className="fas fa-lock-open pr-2"></i>Public
+                          Organization
+                        </span>
+                      )}
+                    </span>
+                  ) : null}
                   {undefined !== organization.location &&
                   organization.location ? (
                     <span>

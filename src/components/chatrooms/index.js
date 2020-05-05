@@ -30,7 +30,7 @@ class Messaging extends React.Component {
       conversation,
     ]);
     console.log(this.props.messaging.conversations.length);
-  };
+  }; 
 
   handleReceivedMessage = (response) => {
     const { message } = response;
@@ -137,7 +137,7 @@ const mapConversations = (conversations, organization_slug, handleClick) => {
     .map((conversation) => {
       return (
         <div
-          className=" conversationDiv p-2 border d-flex flex-column mb-2"
+          className=" conversationDiv border d-flex flex-column mb-2"
           key={conversation.id}
         >
           <div
@@ -145,7 +145,7 @@ const mapConversations = (conversations, organization_slug, handleClick) => {
             className="p-2 text-capitalize font-weight-bold showChat d-flex flex-column"
           >
             <h4>{conversation.title}</h4>
-            <p className="text-truncate" style={{ maxWidth: "1500px" }}>
+            <p className="line-clamp2" >
               {conversation.description}
             </p>
           </div>
