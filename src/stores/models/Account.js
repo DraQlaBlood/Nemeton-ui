@@ -39,7 +39,7 @@ class Account {
     const status = await response.status;
     if (status === 200) {
       const json = await response.json();
-      this.all = await json.data;
+      this.all = await json.data; 
     }
     this.setIsLoading(false);
   }

@@ -9,7 +9,7 @@ import Spinner from "../../lib/components/spinner/load";
 import "./dashboard.css";
 import { withScriptjs, withGoogleMap } from "react-google-maps";
 
-@inject("user", "account","organization")
+@inject("user", "account", "organization")
 @observer
 class Layout extends React.Component {
   componentDidMount = async () => {
@@ -18,9 +18,9 @@ class Layout extends React.Component {
   };
 
   render() {
-   /**  const { isLoading } = this.props.organization;
+    const { isLoading } = this.props.organization;
 
-    if (isLoading) {
+    /**if (isLoading) {
       return (
         <div className="flex-grow-1">
           <div className="d-flex flex-column ">
@@ -33,14 +33,14 @@ class Layout extends React.Component {
     }**/
     return (
       <div className=" flex-grow-1 map">
-        <WrappedMap
-          googleMapURL={
-            "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyBS1r7kVg9WqpAac2CPkCv37MzSaAd4MLU"
-          }
-          loadingElement={<div style={{ height: `100%`, width: "100%" }} />}
-          containerElement={<div style={{ height: `100%`, width: "100%" }} />}
-          mapElement={<div style={{ height: `100%` }} />}
-        />
+          <WrappedMap
+            googleMapURL={
+              "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyBS1r7kVg9WqpAac2CPkCv37MzSaAd4MLU"
+            }
+            loadingElement={<div style={{ height: `100%`, width: "100%" }} />}
+            containerElement={<div style={{ height: `100%`, width: "100%" }} />}
+            mapElement={<div style={{ height: `100%` }} />}
+          />
       </div>
     );
   }

@@ -139,10 +139,9 @@ class Member extends React.Component {
                 </div>
                 <div className="px-3 nav-link">
                   <Link className=" liens " to="/messages">
-                    <i className="fas fa-comments fa-x"></i>
+                    <i className="fas fa-envelope fa-x"></i>
                   </Link>
                 </div>
-
                 <div>
                   <NavDropdown
                     alignRight

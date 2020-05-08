@@ -12,6 +12,8 @@ import Messaging from "../../components/chatrooms";
 import MembersOnly from "../../components/LockContents/memberOnly";
 import Post from "../Posts/new";
 import AllEvents from "../Posts";
+import Spinner from "../../lib/components/spinner/load";
+import { ActionCableConsumer } from "react-actioncable-provider";
 
 var moment = require("moment");
 
@@ -19,26 +21,26 @@ var moment = require("moment");
 @observer
 class OrgModel extends React.PureComponent {
   componentDidMount = async () => {
+    const { id } = this.props.match.params;
+    await this.props.organization.findOne(id);
     await this.props.user.signIn();
     await this.props.account.fetchAll();
     await this.props.account.find();
-    const { id } = this.props.match.params;
-    await this.props.organization.findOne(id);
   };
 
-  componentDidUpdate = async (prevProps) => {
+  /**componentWillReceiveProps = async (prevProps) => {
     if (this.props.membership.notification) {
       await this.props.user.signIn();
       await this.props.account.fetchAll();
       await this.props.account.find();
       const { id } = this.props.match.params;
       await this.props.organization.findOne(id);
-      this.props.membership.resetNotification(false);
+      this.props.membership.showNotification(false);
     }
-  };
+  };*/
 
   joinOrganization = async () => {
-    const { organization } = this.props.organization;
+    const { organization, isLoading } = this.props.organization;
     await this.props.membership.showNotification(true);
     const { organization_slug } = this.props.match.params;
     await this.props.membership.join(organization_slug);
@@ -55,7 +57,7 @@ class OrgModel extends React.PureComponent {
           duration: 5000,
         },
       });
-      this.props.membership.resetNotification(false);
+      this.props.membership.showNotification(false);
     }
   };
   leaveOrganization = async () => {
@@ -68,7 +70,7 @@ class OrgModel extends React.PureComponent {
       store.addNotification({
         title: "Organization Member",
         message: `You are no longer member of ${organization.name}`,
-        type: "success", // 'default', 'success', 'info', 'warning'
+        type: "danger", // 'default', 'success', 'info', 'warning'
         container: "bottom-left", // where to position the notifications
         animationIn: ["animated", "fadeIn"], // animate.css classes that's applied
         animationOut: ["animated", "fadeOut"], // animate.css classes that's applied
@@ -76,7 +78,7 @@ class OrgModel extends React.PureComponent {
           duration: 5000,
         },
       });
-      this.props.membership.resetNotification(false);
+      this.props.membership.showNotification(false);
     }
   };
 
@@ -86,7 +88,7 @@ class OrgModel extends React.PureComponent {
     const { organization_slug } = this.props.match.params;
     await this.props.membership.like(organization_slug);
     if (this.props.membership.notification) {
-      this.props.membership.resetNotification(false);
+      this.props.membership.showNotification(false);
     }
   };
 
@@ -96,7 +98,7 @@ class OrgModel extends React.PureComponent {
     const { organization_slug } = this.props.match.params;
     await this.props.membership.disLike(organization_slug);
     if (this.props.membership.notification) {
-      this.props.membership.resetNotification(false);
+      this.props.membership.showNotification(false);
     }
   };
 
@@ -104,20 +106,39 @@ class OrgModel extends React.PureComponent {
     await this.props.event.setShowModal(true);
   };
 
+  handleReceived = (response) => {
+    const { likers } = response;
+    this.props.organization.setOrganizationLikes(likers);
+  };
+
+  handleReceivedfollowers = (response) => {
+    const { followers } = response;
+    console.log(followers);
+    this.props.organization.setOrganizationFollows(followers);
+  };
+
   render() {
     const { organization, isLoading } = this.props.organization;
     const { account } = this.props.account;
     const { organization_slug } = this.props.match.params;
     const { showModal } = this.props.event;
-    let status = [];
-
-    if (undefined !== organization.account && organization.account.id)
-      console.log(organization.mail);
 
     return (
-      <div className="flex-grow-1 bg-white">
+      <div className="flex-grow-1 d-flex bg-white">
+        <ActionCableConsumer
+          channel={{ channel: "FollowersnotificationsChannel" }}
+          onReceived={this.handleReceivedfollowers}
+        />
+
+        <ActionCableConsumer
+          channel={{ channel: "WebNotificationsChannel" }}
+          onReceived={this.handleReceived}
+        />
+
         {isLoading ? (
-          <p>Loading</p>
+          <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+            <Spinner />
+          </div>
         ) : (
           <div className="flex-grow-1 bg-white">
             <div className="banner ">
@@ -177,9 +198,9 @@ class OrgModel extends React.PureComponent {
                   </Link>
 
                   {undefined !== organization.likers &&
-                  organization.likers.length &&
-                  organization.likers.slice().filter(function (account) {
-                    return account.id === account.id;
+                  organization.likers.length > 0 &&
+                  organization.likers.slice().filter(function (acc) {
+                    return acc.id === account.id;
                   }).length > 0 ? (
                     <Link
                       to="#"
@@ -201,29 +222,31 @@ class OrgModel extends React.PureComponent {
                     Share
                   </Link>
                 </div>
-                {undefined !== organization.account &&
-                organization.account.id === account.id ? null : undefined !==
-                    organization.followers &&
-                  organization.followers.length &&
-                  organization.followers.slice().filter(function (account) {
-                    return account.id === account.id;
-                  }).length > 0 ? (
-                  <Link
-                    to="#"
-                    onClick={this.leaveOrganization}
-                    className="px-2 showLinks"
-                  >
-                    Leave this organization
-                  </Link>
-                ) : (
-                  <Link
-                    to="#"
-                    onClick={this.joinOrganization}
-                    className="px-2 showLinks"
-                  >
-                    Join this organization
-                  </Link>
-                )}
+                {undefined !== organization.followers &&
+                organization.followers.length > 0 &&
+                organization.followers.slice().filter(function (acc) {
+                  return acc.id === account.id;
+                }).length > 0
+                  ? undefined !== organization.account &&
+                    organization.account.id !== account.id && (
+                      <Link
+                        to="#"
+                        onClick={this.leaveOrganization}
+                        className="px-2 showLinks"
+                      >
+                        Leave this organization
+                      </Link>
+                    )
+                  : undefined !== organization.account &&
+                    organization.account.id !== account.id && (
+                      <Link
+                        to="#"
+                        onClick={this.joinOrganization}
+                        className="px-2 showLinks"
+                      >
+                        Join this organization
+                      </Link>
+                    )}
                 {undefined !== organization.account &&
                 organization.account.id === account.id ? (
                   <div className="d-flex">
@@ -456,29 +479,30 @@ class OrgModel extends React.PureComponent {
                               aria-labelledby="v-pills-members-tab"
                             >
                               <div className="flex-fill d-flex flex-column">
-                                {organization.followers
-                                  .slice()
-                                  .map((member) => {
-                                    return (
-                                      <div
-                                        key={member.id}
-                                        className="p-2 my-2 d-flex bg-light justify-content-between"
-                                      >
-                                        <div className="d-flex flex-column">
-                                          <h5>{member.name}</h5>
-                                          <div className="text-muted d-flex">
-                                            <span className="text-muted px-2">
-                                              Joined on
-                                            </span>
-                                            {moment(
-                                              new Date(member.created_at)
-                                            ).format("MMMM Do YYYY")}
+                                {undefined !== organization.followers &&
+                                  organization.followers
+                                    .slice()
+                                    .map((member) => {
+                                      return (
+                                        <div
+                                          key={member.id}
+                                          className="p-2 my-2 d-flex bg-light justify-content-between"
+                                        >
+                                          <div className="d-flex flex-column">
+                                            <h5>{member.name}</h5>
+                                            <div className="text-muted d-flex">
+                                              <span className="text-muted px-2">
+                                                Joined on
+                                              </span>
+                                              {moment(
+                                                new Date(member.created_at)
+                                              ).format("MMMM Do YYYY")}
+                                            </div>
                                           </div>
+                                          <i className="far fa-comment-alt fa-x "></i>
                                         </div>
-                                        <i className="far fa-comment-alt fa-x "></i>
-                                      </div>
-                                    );
-                                  })}
+                                      );
+                                    })}
                               </div>
                             </div>
                           </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 import "./organization.css";
-import { Button, Card, Modal, Form, Row, Col, Spinner } from "react-bootstrap";
+import { Button, Modal, Form, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import EmptyData from "../../components/LockContents/emptyData";
 import PlacesAutocomplete from "react-places-autocomplete";
@@ -11,6 +11,7 @@ import {
   getLatLng,
 } from "react-places-autocomplete";
 import NoContent from "../../components/LockContents/noContent";
+import Spinner from "../../lib/components/spinner/load";
 
 @inject("user", "account", "organization")
 @observer
@@ -74,22 +75,11 @@ class OrgCollections extends React.Component {
     const { account } = this.props.account;
     let actualAccount = account.id;
 
-    if (isLoading) {
-      return (
-        <div className="flex-grow-1">
-          <div className="d-flex flex-column ">
-            <div className="align-self-center">
-              <Spinner />
-            </div>
-          </div>
-        </div>
-      );
-    }
     return (
       <div className="flex-grow-1 bg-light">
         <div className="organization-banner text-white d-flex flex-column px-5 py-4 d-none d-xs-none d-sm-none d-md-none d-lg-block">
           <div className=" d-flex justify-content-between">
-            <div className="d-flex col-md-4">
+            <div className="d-flex col-md-4 ">
               <div className="p-2 mr-3">
                 <h4 className="font-weight-bold text-capitalize">
                   Organization Dashboard
@@ -250,148 +240,156 @@ class OrgCollections extends React.Component {
           </div>
         </div>
 
-        <div className="descripto bg-light mx-5">
-          <div className="row">
-            <div className="col-md-12 p-3">
-              {all.length > 0 ? (
-                <div className="d-flex flex-column">
-                  {all.filter(function (organization) {
-                    return organization.account.id === account.id;
-                  }).length > 0 ? (
-                    <div className="d-flex justify-content-between p-2 text-dark">
-                      <h5>Organizations you admin</h5>
-                      <span>View more</span>
-                    </div>
-                  ) : null}
-                  <div className="row ">
-                    {all
-                      .filter(function (organization) {
-                        return organization.account.id === account.id;
-                      })
-                      .slice(0,8)
-                      .map((organization) => {
-                        return (
-                          <div className="col-md-3 p-2 text-dark">
-                            <div
-                              className="orgDisplay rounded  d-flex flex-column justify-content-between  shadow-sm bg-white "
-                              key={organization.id}
-                            >
-                              <div className="divTopOrganization bg-dark">
-                                test
-                              </div>
-                              <div className="divBottomOrganization p-2 flex-grow-1 d-flex justify-content-around align-items-center ">
-                                <Link
-                                  className="font-weight-bold text-dark "
-                                  to={`/show/${organization.slug}/${organization.id}`}
-                                >
-                                  <h5 className=" text-capitalize font-weight-bold">
-                                    {organization.name}
-                                  </h5>
-                                </Link>
-                              </div>
-                              <div className="d-flex p-2 justify-content-between text-muted">
-                                <div>
-                                  <i className="fas fa-comments mr-2"></i>
-                                  <span>
-                                    {organization.conversations.length}
-                                  </span>
+        <div className="descripto d-flex bg-light mx-5">
+          {isLoading ? (
+            <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="flex-grow-1">
+              <div className="p-3">
+                {all.length > 0 ? (
+                  <div className="d-flex flex-column">
+                    {all.filter(function (organization) {
+                      return organization.account.id === account.id;
+                    }).length > 0 ? (
+                      <div className="d-flex justify-content-between py-2 text-dark">
+                        <h5>Organizations you admin</h5>
+                        <span>View more</span>
+                      </div>
+                    ) : null}
+                    <div className="row ">
+                      {all
+                        .filter(function (organization) {
+                          return organization.account.id === account.id;
+                        })
+                        .slice(0, 8)
+                        .map((organization) => {
+                          return (
+                            <div className="col-md-3 p-2 text-dark">
+                              <div
+                                className="orgDisplay rounded  d-flex flex-column justify-content-between  shadow-sm bg-white "
+                                key={organization.id}
+                              >
+                                <div className="divTopOrganization bg-dark">
+                                  test
                                 </div>
-                                <div>
-                                  <i className="fas fa-heart mr-2"></i>
-                                  <span>{organization.likers.length}</span>
+                                <div className="divBottomOrganization p-2 flex-grow-1 d-flex justify-content-around align-items-center ">
+                                  <Link
+                                    className="font-weight-bold text-dark "
+                                    to={`/show/${organization.slug}/${organization.id}`}
+                                  >
+                                    <h5 className=" text-capitalize font-weight-bold">
+                                      {organization.name}
+                                    </h5>
+                                  </Link>
                                 </div>
-                                <div>
-                                  <i className="fas fa-users mr-2"></i>
-                                  <span>{organization.followers.length}</span>
-                                </div>
-                                <div>
-                                  {organization.status === "open" ? (
-                                    <i className="fas fa-lock-open mr-2"></i>
-                                  ) : (
-                                    <i className="fas fa-lock mr-2"></i>
-                                  )}
-                                  <span className="text-uppercase">
-                                    {organization.status}
-                                  </span>
+                                <div className="d-flex p-2 justify-content-between text-muted">
+                                  <div>
+                                    <i className="fas fa-comments mr-2"></i>
+                                    <span>
+                                      {organization.conversations.length}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <i className="fas fa-heart mr-2"></i>
+                                    <span>{organization.likers.length}</span>
+                                  </div>
+                                  <div>
+                                    <i className="fas fa-users mr-2"></i>
+                                    <span>{organization.followers.length}</span>
+                                  </div>
+                                  <div>
+                                    {organization.status === "open" ? (
+                                      <i className="fas fa-lock-open mr-2"></i>
+                                    ) : (
+                                      <i className="fas fa-lock mr-2"></i>
+                                    )}
+                                    <span className="text-uppercase">
+                                      {organization.status}
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                    <div className="d-flex justify-content-between rounded p-2 text-dark">
+                          );
+                        })}
+                    </div>
+                    <div className="d-flex justify-content-between rounded py-2 text-dark">
                       <h5>Organizations you follow</h5>
                       <span>View more</span>
                     </div>
-                  <div className="row">
-                    {all.slice().map((organization) => {
-                      if (
-                        (organization.likers.slice().filter(function (account) {
-                          return account.id === actualAccount;
-                        }).length > 0 ||
-                          organization.followers
+                    <div className="row">
+                      {all.slice().map((organization) => {
+                        if (
+                          (organization.likers
                             .slice()
                             .filter(function (account) {
                               return account.id === actualAccount;
-                            }).length > 0) &&
-                        organization.account.id !== actualAccount
-                      ) {
-                        return (
-                          <div className="col-md-3 px-2 py-3 text-dark">
-                            <div
-                              className="orgDisplay rounded p-3 d-flex flex-column justify-content-between  shadow-sm bg-white "
-                              key={organization.id}
-                            >
-                              <div className="divTopOrganization bg-dark"></div>
-                              <div className="divBottomOrganization flex-grow-1 d-flex justify-content-around align-items-center ">
-                                <Link
-                                  className="font-weight-bold text-dark "
-                                  to={`/show/${organization.slug}/${organization.id}`}
-                                >
-                                  <h5 className=" text-capitalize font-weight-bold">
-                                    {organization.name}
-                                  </h5>
-                                </Link>
-                              </div>
-                              <div className="d-flex justify-content-between text-muted">
-                                <div>
-                                  <i className="fas fa-comments mr-2"></i>
-                                  <span>
-                                    {organization.conversations.length}
-                                  </span>
+                            }).length > 0 ||
+                            organization.followers
+                              .slice()
+                              .filter(function (account) {
+                                return account.id === actualAccount;
+                              }).length > 0) &&
+                          organization.account.id !== actualAccount
+                        ) {
+                          return (
+                            <div className="col-md-3 px-2 py-3 text-dark">
+                              <div
+                                className="orgDisplay rounded p-3 d-flex flex-column justify-content-between  shadow-sm bg-white "
+                                key={organization.id}
+                              >
+                                <div className="divTopOrganization bg-dark"></div>
+                                <div className="divBottomOrganization flex-grow-1 d-flex justify-content-around align-items-center ">
+                                  <Link
+                                    className="font-weight-bold text-dark "
+                                    to={`/show/${organization.slug}/${organization.id}`}
+                                  >
+                                    <h5 className=" text-capitalize font-weight-bold">
+                                      {organization.name}
+                                    </h5>
+                                  </Link>
                                 </div>
-                                <div>
-                                  <i className="fas fa-heart mr-2"></i>
-                                  <span>{organization.likers.length}</span>
-                                </div>
-                                <div>
-                                  <i className="fas fa-users mr-2"></i>
-                                  <span>{organization.followers.length}</span>
-                                </div>
-                                <div>
-                                  {organization.status === "open" ? (
-                                    <i className="fas fa-lock-open mr-2"></i>
-                                  ) : (
-                                    <i className="fas fa-lock mr-2"></i>
-                                  )}
-                                  <span className="text-uppercase">
-                                    {organization.status}
-                                  </span>
+                                <div className="d-flex justify-content-between text-muted">
+                                  <div>
+                                    <i className="fas fa-comments mr-2"></i>
+                                    <span>
+                                      {organization.conversations.length}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <i className="fas fa-heart mr-2"></i>
+                                    <span>{organization.likers.length}</span>
+                                  </div>
+                                  <div>
+                                    <i className="fas fa-users mr-2"></i>
+                                    <span>{organization.followers.length}</span>
+                                  </div>
+                                  <div>
+                                    {organization.status === "open" ? (
+                                      <i className="fas fa-lock-open mr-2"></i>
+                                    ) : (
+                                      <i className="fas fa-lock mr-2"></i>
+                                    )}
+                                    <span className="text-uppercase">
+                                      {organization.status}
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      }
-                    })}
+                          );
+                        }
+                      })}
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <NoContent />
-              )}
+                ) : (
+                  <NoContent />
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     );

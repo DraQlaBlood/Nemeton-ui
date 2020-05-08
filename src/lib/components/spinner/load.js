@@ -6,10 +6,10 @@ export default class Spinner extends React.Component {
   render() {
     return (
       <Loader
-        type="TailSpin"
-        color="#B22234"
-        height={100}
-        width={100}
+        type="Watch"
+        color="#3c3b6e"
+        height={25}
+        width={25}
         timeout={3000} //3 secs
       />
     );

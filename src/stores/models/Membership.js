@@ -3,25 +3,29 @@ import Api from "../../lib/helpers/api/index";
 
 class MemberShips {
   path = "/memberships";
-  pathLike = "/likes"
+  pathLike = "/likes";
   account_id = null;
 
   @observable notification = false;
-  
-  @observable liked = false;
+
+  @observable isLiked = false;
+  @observable isDisliked = false;
 
   @action showNotification(status) {
     this.notification = status;
   }
-  @action resetNotification(status) {
-    this.notification = status;
+
+  @action setIsLiked(isLiked) {
+    this.isLiked = isLiked;
+  }
+  @action setIsDisLiked(isDisliked) {
+    this.isDisliked = isDisliked;
   }
 
-  
   @action async join(organization_id) {
     this.account_id = localStorage.getItem("account_id");
     const response = await Api.post(`/` + this.account_id + this.path, {
-      organization_id
+      organization_id,
     });
     const status = await response.status;
 
@@ -35,7 +39,9 @@ class MemberShips {
 
   @action async leave(organization_id) {
     this.account_id = localStorage.getItem("account_id");
-    const response = await Api.delete(`/` + this.account_id +`/organizations/`+organization_id +this.path);
+    const response = await Api.delete(
+      `/` + this.account_id + `/organizations/` + organization_id + this.path
+    );
     const status = await response.status;
     console.log(status);
     if (status === 200) {
@@ -45,34 +51,39 @@ class MemberShips {
     }
   }
 
-    // Like and disliking organizations
+  // Like and disliking organizations
 
-    @action async like(organization_id) {
-      this.account_id = localStorage.getItem("account_id");
-      const response = await Api.post(`/` + this.account_id + this.pathLike, {
-        organization_id
-      });
-      const status = await response.status;
-  
-      console.log(status);
-      if (status === 200) {
-        this.showNotification(true);
-      } else {
-        console.log("error");
-      }
-    }
-  
-    @action async disLike(organization_id) {
-      this.account_id = localStorage.getItem("account_id");
-      const response = await Api.delete(`/` + this.account_id +`/organizations/`+organization_id +this.pathLike);
-      const status = await response.status;
-      console.log(status);
-      if (status === 200) {
-        this.showNotification(true);
-      } else {
-        console.log("error");
-      }
-    }
+  @action async like(organization_id) {
+    this.account_id = localStorage.getItem("account_id");
+    const response = await Api.post(`/` + this.account_id + this.pathLike, {
+      organization_id,
+    });
+    const status = await response.status;
 
+    console.log(status);
+    if (status === 200) {
+      this.showNotification(true);
+    } else {
+      console.log("error");
+    }
+  }
+
+  @action async disLike(organization_id) {
+    this.account_id = localStorage.getItem("account_id");
+    const response = await Api.delete(
+      `/` +
+        this.account_id +
+        `/organizations/` +
+        organization_id +
+        this.pathLike
+    );
+    const status = await response.status;
+    console.log(status);
+    if (status === 200) {
+      this.showNotification(true);
+    } else {
+      console.log("error");
+    }
+  }
 }
 export default new MemberShips();
