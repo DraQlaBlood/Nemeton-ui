@@ -91,7 +91,7 @@ class Member extends React.Component {
           </Modal.Body>
         </Modal>
 
-        <div className="d-flex border-bottom">
+        <div className="d-flex border-bottom sticky-top" >
           <div className="px-4 py-3 d-none d-xs-none d-sm-none d-md-none d-lg-block">
             <Link className="nav-link text-uppercase" to="/welcome">
               <span className="text-uppercase font-weight-bold ">Nemeton</span>
@@ -240,13 +240,13 @@ class Member extends React.Component {
               </div>
               <div className="p-3 nav-link">
                 <Link className=" liens " to="/my-notifications">
-                  <i className="fas fa-bell fa-x"></i>
+                  <i className="fas fa-plus fa-x"></i>
                 </Link>
               </div>
               <div className="d-flex">
                 <div className=" p-3 nav-link">
                   <Link className=" liens " to="/users/chatrooms">
-                    <i className="fas fa-comments fa-x"></i>
+                    <i className="fas fa-envelope fa-x"></i>
                   </Link>
                 </div>
               </div>

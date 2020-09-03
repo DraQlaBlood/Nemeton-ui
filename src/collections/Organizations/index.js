@@ -87,10 +87,13 @@ class OrgCollections extends React.Component {
               </div>
             </div>
             <div className="d-flex ">
-              <Button className="btn-red text-white" onClick={this.handleShow}>
+              <Button className="btn-light text-dark" onClick={this.handleShow}>
+                Create a request
+              </Button>
+              <Button className="btn-light ml-2 text-dark" onClick={this.handleShow}>
                 Start a new Organization
               </Button>
-              <Button className="btn-red ml-2 text-white">
+              <Button className="btn-light ml-2 text-dark">
                 <i className="fas fa-tools fa-x pr-2"></i>
                 Bulk Manage Organizations
               </Button>
@@ -246,14 +249,24 @@ class OrgCollections extends React.Component {
               <Spinner />
             </div>
           ) : (
-            <div className="flex-grow-1">
-              <div className="p-3">
-                {all.length > 0 ? (
+            <div className="flex-grow-1 d-flex row">
+              <div className="col-md-4 col-sm-12 border-right">
+                <div className="p-3">
                   <div className="d-flex flex-column">
+                    <div className="d-flex justify-content-between py-2 text-dark">
+                      <h5>Volunteer requests</h5>
+                      <span>View more</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-8 col-sm-12 ">
+                {all.length > 0 ? (
+                  <div className="p-md-3 d-flex flex-column">
                     {all.filter(function (organization) {
                       return organization.account.id === account.id;
                     }).length > 0 ? (
-                      <div className="d-flex justify-content-between py-2 text-dark">
+                      <div className="d-flex justify-content-between py-md-2 text-dark">
                         <h5>Organizations you admin</h5>
                         <span>View more</span>
                       </div>
@@ -266,7 +279,7 @@ class OrgCollections extends React.Component {
                         .slice(0, 8)
                         .map((organization) => {
                           return (
-                            <div className="col-md-3 p-2 text-dark">
+                            <div className="col-md-4 col-sm-12 p-md-2 text-dark">
                               <div
                                 className="orgDisplay rounded  d-flex flex-column justify-content-between  shadow-sm bg-white "
                                 key={organization.id}
@@ -335,7 +348,7 @@ class OrgCollections extends React.Component {
                           organization.account.id !== actualAccount
                         ) {
                           return (
-                            <div className="col-md-3 px-2 py-3 text-dark">
+                            <div className="col-md-4 px-2 py-3 text-dark">
                               <div
                                 className="orgDisplay rounded p-3 d-flex flex-column justify-content-between  shadow-sm bg-white "
                                 key={organization.id}

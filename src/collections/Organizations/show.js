@@ -14,16 +14,19 @@ import Post from "../Posts/new";
 import AllEvents from "../Posts";
 import Spinner from "../../lib/components/spinner/load";
 import { ActionCableConsumer } from "react-actioncable-provider";
+import OrganizationFeeds from "./organizationFeeds";
+import Request from "../Requests/new";
 
 var moment = require("moment");
 
-@inject("user", "account", "organization", "membership", "event")
+@inject("user", "account", "organization", "membership", "event", "request")
 @observer
 class OrgModel extends React.PureComponent {
   componentDidMount = async () => {
+    await this.props.user.signIn();
+
     const { id } = this.props.match.params;
     await this.props.organization.findOne(id);
-    await this.props.user.signIn();
     await this.props.account.fetchAll();
     await this.props.account.find();
   };
@@ -40,7 +43,7 @@ class OrgModel extends React.PureComponent {
   };*/
 
   joinOrganization = async () => {
-    const { organization, isLoading } = this.props.organization;
+    const { organization } = this.props.organization;
     await this.props.membership.showNotification(true);
     const { organization_slug } = this.props.match.params;
     await this.props.membership.join(organization_slug);
@@ -54,7 +57,7 @@ class OrgModel extends React.PureComponent {
         animationIn: ["animated", "fadeIn"], // animate.css classes that's applied
         animationOut: ["animated", "fadeOut"], // animate.css classes that's applied
         dismiss: {
-          duration: 5000,
+          duration: 3000,
         },
       });
       this.props.membership.showNotification(false);
@@ -75,7 +78,7 @@ class OrgModel extends React.PureComponent {
         animationIn: ["animated", "fadeIn"], // animate.css classes that's applied
         animationOut: ["animated", "fadeOut"], // animate.css classes that's applied
         dismiss: {
-          duration: 5000,
+          duration: 3000,
         },
       });
       this.props.membership.showNotification(false);
@@ -106,6 +109,13 @@ class OrgModel extends React.PureComponent {
     await this.props.event.setShowModal(true);
   };
 
+  handleShowRequestModal = async () => {
+    await this.props.request.isShowRequestModal(true);
+  };
+  handleCloseRequestModal = async () => {
+    await this.props.request.isShowRequestModal(false);
+  };
+
   handleReceived = (response) => {
     const { likers } = response;
     this.props.organization.setOrganizationLikes(likers);
@@ -122,6 +132,7 @@ class OrgModel extends React.PureComponent {
     const { account } = this.props.account;
     const { organization_slug } = this.props.match.params;
     const { showModal } = this.props.event;
+    const { showRequestModal } = this.props.request;
 
     return (
       <div className="flex-grow-1 d-flex bg-white">
@@ -257,7 +268,14 @@ class OrgModel extends React.PureComponent {
                     >
                       New Event
                     </Link>
-                    <i className="fas fa-ellipsis-v ml-5"></i>
+                    <Link
+                      to="#"
+                      onClick={this.handleShowRequestModal}
+                      className="showLinks ml-3 text-capitalize"
+                    >
+                      New organization Request
+                    </Link>
+                    <i className="fas fa-ellipsis-v ml-3"></i>
                   </div>
                 ) : null}
               </div>
@@ -265,19 +283,20 @@ class OrgModel extends React.PureComponent {
             <Modal show={showModal} onHide={this.handleClose}>
               <Post organization_id={organization.id} />
             </Modal>
+            <Modal show={showRequestModal} onHide={this.handleCloseRequestModal}>
+              <Request organization_id={organization.id} />
+            </Modal>
             <div className="row mx-auto showBody">
-              <div className="col-md-12">
+              <div className="col-md-8">
                 <Tabs
                   defaultActiveKey="About"
                   className="d-flex justify-content-around"
                 >
                   <Tab eventKey="About" title="About">
-                    <div className="py-3 row">
-                      <div className="col-sm-12 col-md-8">
+                    <div className="p-3 row">
+                      <div className="col-sm-12 col-md-12">
                         <div className="d-flex flex-column">
-                          <h5 className="text-capitalize pb-4">
-                            {organization.about}
-                          </h5>
+                          <p className="pb-4">{organization.about}</p>
 
                           {organization.mail ? (
                             <h5 className="mt-3">Contact us</h5>
@@ -332,45 +351,6 @@ class OrgModel extends React.PureComponent {
                           </div>
                         </div>
                       </div>
-
-                      {undefined !== organization.account ? (
-                        <div className="col-sm-12 col-md-4 ">
-                          <div className="our-team border">
-                            <div className="picture">
-                              <img
-                                className="img-fluid"
-                                alt=""
-                                src="https://picsum.photos/130/130?image=1027"
-                              />
-                            </div>
-                            <div className="team-content">
-                              <h3 className="font-weight-bold ">
-                                {organization.account.name}
-                              </h3>
-                              <h4 className="title">
-                                {organization.account.bio}
-                              </h4>
-                            </div>
-                            <ul className="social d-flex justify-content-around p-2">
-                              <li>
-                                <i className="fab fa-facebook-f fa-2x"></i>
-                              </li>
-                              <li>
-                                <i className="fab fa-twitter fa-2x"></i>
-                              </li>
-                              <li>
-                                <i className="fab fa-instagram fa-2x"></i>
-                              </li>
-                              <li>
-                                <i className="fab fa-youtube fa-2x"></i>
-                              </li>
-                              <li>
-                                <i className="fab fa-linkedin-in fa-2x"></i>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      ) : null}
                     </div>
                   </Tab>
                   <Tab eventKey="Events" title="Events">
@@ -517,6 +497,50 @@ class OrgModel extends React.PureComponent {
                     )}
                   </Tab>
                 </Tabs>
+              </div>
+              <div className="col-md-4 border-left bg-light">
+                {undefined !== organization.account ? (
+                  <div className="p-4 d-flex flex-column">
+                    <div className="our-team border">
+                      <div className="picture">
+                        <img
+                          className="img-fluid"
+                          alt=""
+                          src="https://picsum.photos/130/130?image=1027"
+                        />
+                      </div>
+                      <div className="team-content">
+                        <h5 className="font-weight-bold ">
+                          {organization.account.name}
+                        </h5>
+                        <p>Organization admin - View profile</p>
+                        <p className="title line-clamp2">
+                          {organization.account.bio}
+                        </p>
+                      </div>
+                      <ul className="social d-flex justify-content-around p-2">
+                        <li>
+                          <i className="fab fa-facebook-f fa-x"></i>
+                        </li>
+                        <li>
+                          <i className="fab fa-twitter fa-x"></i>
+                        </li>
+                        <li>
+                          <i className="fab fa-instagram fa-x"></i>
+                        </li>
+                        <li>
+                          <i className="fab fa-youtube fa-x"></i>
+                        </li>
+                        <li>
+                          <i className="fab fa-linkedin-in fa-x"></i>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                ) : null}
+                <div className="mb-3">
+                  <OrganizationFeeds organization_slug={organization_slug} />
+                </div>
               </div>
             </div>
           </div>

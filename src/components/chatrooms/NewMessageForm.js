@@ -31,7 +31,7 @@ class NewMessageForm extends React.Component {
                 as="textarea"
                 rows="2"
                 ref="message"
-                placeholder="Post a comment"
+                placeholder="(***)-***-***"
               />
             </Form.Group>
           </Form>
